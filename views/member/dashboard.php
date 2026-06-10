@@ -2,119 +2,30 @@
 use yii\helpers\Html;
 $this->title = 'Member Dashboard';
 ?>
-<div class="member-dashboard" style="padding-top: 70px;">
 
-    <div class="row">
-        <div class="col-12">
-            <h2>⛪ Church Management System</h2>
-            <p class="text-muted">Welcome, <?= Html::encode($user->username) ?>!</p>
-            <hr>
-        </div>
+<div style="padding-top: 70px;">
+
+    <!-- Welcome Bar -->
+    <div style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: white; padding: 25px 30px; border-radius: 12px; margin-bottom: 25px; box-shadow: 0 4px 15px rgba(17,153,142,0.3);">
+        <h2 style="margin:0; font-size:24px;">⛪ Faith Christian Church</h2>
+        <p style="margin:8px 0 0 0; opacity:0.9; font-size:15px;">Welcome, <?= Html::encode($user->username) ?>! — <?= date('l, d F Y') ?></p>
+        <p style="margin:5px 0 0 0; opacity:0.8; font-size:13px;">🙏 "For where two or three gather in my name, there am I with them." — Matthew 18:20</p>
     </div>
 
+    <!-- Quick Access Cards -->
+    <h5 style="color:#555; margin-bottom:15px; font-weight:600;">📌 Quick Access</h5>
     <div class="row">
-        <div class="col-md-3 col-sm-6" style="margin-bottom: 20px;">
-            <div class="panel panel-primary">
-                <div class="panel-heading">
-                    <h3 class="panel-title">📢 Announcements</h3>
-                </div>
-                <div class="panel-body text-center">
-                    <p>View church announcements</p>
-                    <?= Html::a('View', ['/events/index'], ['class' => 'btn btn-primary btn-sm']) ?>
-                </div>
+
+        <div class="col-xs-6 col-md-3" style="margin-bottom:20px;">
+            <div style="background:#fff; border-radius:12px; padding:25px 20px; box-shadow:0 3px 12px rgba(0,0,0,0.08); border-top:4px solid #4e73df; text-align:center; transition:all 0.3s;">
+                <div style="font-size:40px; margin-bottom:10px;">📢</div>
+                <h5 style="color:#4e73df; font-weight:700; margin:0 0 8px 0;">Announcements</h5>
+                <p style="color:#888; font-size:13px; margin:0 0 15px 0;">View church announcements & events</p>
+                <?= Html::a('View →', ['/events/index'], ['style' => 'background:#4e73df; color:white; padding:8px 20px; border-radius:20px; text-decoration:none; font-size:13px; font-weight:600;']) ?>
             </div>
         </div>
 
-        <div class="col-md-3 col-sm-6" style="margin-bottom: 20px;">
-            <div class="panel panel-success">
-                <div class="panel-heading">
-                    <h3 class="panel-title">🙏 Prayer Requests</h3>
-                </div>
-                <div class="panel-body text-center">
-                    <p>Submit or view prayers</p>
-                    <?= Html::a('View', ['/prayer-requests/index'], ['class' => 'btn btn-success btn-sm']) ?>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-3 col-sm-6" style="margin-bottom: 20px;">
-            <div class="panel panel-warning">
-                <div class="panel-heading">
-                    <h3 class="panel-title">💰 Offerings</h3>
-                </div>
-                <div class="panel-body text-center">
-                    <p>Ways to give offerings</p>
-                    <?= Html::a('View', ['/site/offerings'], ['class' => 'btn btn-warning btn-sm']) ?>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-3 col-sm-6" style="margin-bottom: 20px;">
-            <div class="panel panel-info">
-                <div class="panel-heading">
-                    <h3 class="panel-title">👤 Profile</h3>
-                </div>
-                <div class="panel-body text-center">
-                    <p>View your profile</p>
-                    <?= Html::a('View', ['/users/view', 'id' => Yii::$app->user->id], ['class' => 'btn btn-info btn-sm']) ?>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-md-6" style="margin-bottom: 20px;">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">📅 Recent Events</h3>
-                </div>
-                <div class="panel-body">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr><th>#</th><th>Event</th><th>Date</th></tr>
-                        </thead>
-                        <tbody>
-                            <?php foreach ($events as $i => $event): ?>
-                            <tr>
-                                <td><?= $i + 1 ?></td>
-                                <td><?= Html::encode($event->title) ?></td>
-                                <td><?= Html::encode($event->event_date) ?></td>
-                            </tr>
-                            <?php endforeach; ?>
-                            <?php if (empty($events)): ?>
-                            <tr><td colspan="3" class="text-center">No events found</td></tr>
-                            <?php endif; ?>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-6" style="margin-bottom: 20px;">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h3 class="panel-title">🙏 Recent Prayer Requests</h3>
-                </div>
-                <div class="panel-body">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr><th>#</th><th>Request</th></tr>
-                        </thead>
-                        <tbody>
-                            <?php foreach ($prayers as $i => $prayer): ?>
-                            <tr>
-                                <td><?= $i + 1 ?></td>
-                                <td><?= Html::encode($prayer->request) ?></td>
-                            </tr>
-                            <?php endforeach; ?>
-                            <?php if (empty($prayers)): ?>
-                            <tr><td colspan="2" class="text-center">No prayer requests found</td></tr>
-                            <?php endif; ?>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-
-</div>
+        <div class="col-xs-6 col-md-3" style="margin-bottom:20px;">
+            <div style="background:#fff; border-radius:12px; padding:25px 20px; box-shadow:0 3px 12px rgba(0,0,0,0.08); border-top:4px solid #1cc88a; text-align:center;">
+                <div style="font-size:40px; margin-bottom:10px;">🙏</div>
+                <h5 style="color:#1cc88a;
