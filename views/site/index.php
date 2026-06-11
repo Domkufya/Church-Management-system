@@ -1,206 +1,89 @@
 <?php
-
 /** @var yii\web\View $this */
-
 use yii\helpers\Html;
-
-$this->title = 'My Yii Application';
-$this->params['meta_description'] = 'A high-performance PHP framework best for developing web applications. Fast, secure, and professional.';
-$this->params['meta_keywords'] = 'yii, yii2, php, framework, web application, high-performance';
+$this->title = 'Faith Christian Church';
 ?>
-<div class="site-index">
 
-    <!-- Hero banner with Yii gradient -->
-    <div class="hero-banner text-white rounded-4 p-5 mb-4 position-relative overflow-hidden">
-        <?= Html::img(Yii::getAlias('@web/images/yii3_full_white_for_dark.svg'), [
-            'alt' => '',
-            'class' => 'd-none d-lg-block position-absolute hero-logo',
-        ]) ?>
-        <div class="position-relative">
-            <h1 class="display-5 fw-bold mb-3">Build with Yii Framework</h1>
-            <p class="lead opacity-75 mb-4 hero-lead">
-                A high-performance PHP framework best for developing web applications.
-                Fast, secure, and professional.
-            </p>
-            <div class="d-flex gap-2 flex-wrap">
-                <?= Html::a(
-                    'Get Started',
-                    'https://www.yiiframework.com/doc/guide/2.0/en/start-installation',
-                    [
-                        'class' => 'btn btn-light btn-lg fw-semibold px-4',
-                        'rel' => 'noopener',
-                        'target' => '_blank',
-                    ],
-                ) ?>
-                <?= Html::a(
-                    'API Reference',
-                    'https://www.yiiframework.com/doc/api/2.0',
-                    [
-                        'class' => 'btn btn-outline-light btn-lg px-4',
-                        'rel' => 'noopener',
-                        'target' => '_blank',
-                    ],
-                ) ?>
-            </div>
+<div style="min-height: 100vh; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); margin-top:-20px; padding-top:80px;">
+
+    <!-- Hero Section -->
+    <div style="text-align:center; padding: 60px 20px 40px 20px; color:white;">
+        <div style="font-size:70px; margin-bottom:15px;">⛪</div>
+        <h1 style="font-size:42px; font-weight:800; margin:0; letter-spacing:2px;">Faith Christian Church</h1>
+        <p style="font-size:18px; opacity:0.8; margin:15px 0 5px 0;">Church Management System</p>
+        <p style="font-size:14px; opacity:0.6; margin:0; font-style:italic;">"For where two or three gather in my name, there am I with them." — Matthew 18:20</p>
+
+        <div style="margin-top:35px;">
+            <?= Html::a('🔑 Login', ['/site/login'], [
+                'style' => 'background:#e74a3b; color:white; padding:14px 40px; border-radius:30px; text-decoration:none; font-size:16px; font-weight:700; margin:8px; display:inline-block; box-shadow:0 4px 15px rgba(231,74,59,0.4);'
+            ]) ?>
+            <?= Html::a('📝 Register', ['/site/register'], [
+                'style' => 'background:#1cc88a; color:white; padding:14px 40px; border-radius:30px; text-decoration:none; font-size:16px; font-weight:700; margin:8px; display:inline-block; box-shadow:0 4px 15px rgba(28,200,138,0.4);'
+            ]) ?>
         </div>
     </div>
 
-    <!-- Extensions grid -->
-    <div class="row g-3">
-        <div class="col-md-6 col-lg-4">
-            <div class="card h-100 border-0 shadow-sm rounded-3 extension-card">
-                <div class="card-body">
-                    <div class="d-flex align-items-center mb-3">
-                        <span class="extension-icon" aria-hidden="true">&#128270;</span>
-                        <h3 class="h6 fw-bold mb-0 ms-2">yii2-debug</h3>
-                    </div>
-                    <p class="text-body-secondary small mb-0">
-                        Debug toolbar and debugger for Yii2. Inspect logs, database queries,
-                        request data, and application performance in real time.
-                    </p>
+    <!-- Features Section -->
+    <div style="max-width:1100px; margin:0 auto; padding:20px 20px 60px 20px;">
+        <h3 style="text-align:center; color:white; margin-bottom:30px; opacity:0.9;">What We Offer</h3>
+
+        <div class="row">
+            <div class="col-md-4 col-sm-6" style="margin-bottom:20px;">
+                <div style="background:rgba(255,255,255,0.08); border-radius:15px; padding:25px; text-align:center; border:1px solid rgba(255,255,255,0.1);">
+                    <div style="font-size:40px; margin-bottom:12px;">📢</div>
+                    <h5 style="color:white; font-weight:700; margin:0 0 8px 0;">Announcements</h5>
+                    <p style="color:rgba(255,255,255,0.6); font-size:13px; margin:0;">Stay updated with church events and announcements</p>
                 </div>
-                <div class="card-footer bg-transparent border-0 pt-0">
-                    <?= Html::a(
-                        'Learn more &raquo;',
-                        'https://www.yiiframework.com/extension/yiisoft/yii2-debug',
-                        [
-                            'class' => 'btn btn-sm btn-outline-secondary',
-                            'rel' => 'noopener',
-                            'target' => '_blank',
-                        ],
-                    ) ?>
+            </div>
+
+            <div class="col-md-4 col-sm-6" style="margin-bottom:20px;">
+                <div style="background:rgba(255,255,255,0.08); border-radius:15px; padding:25px; text-align:center; border:1px solid rgba(255,255,255,0.1);">
+                    <div style="font-size:40px; margin-bottom:12px;">🙏</div>
+                    <h5 style="color:white; font-weight:700; margin:0 0 8px 0;">Prayer Requests</h5>
+                    <p style="color:rgba(255,255,255,0.6); font-size:13px; margin:0;">Submit and view prayer requests from the community</p>
+                </div>
+            </div>
+
+            <div class="col-md-4 col-sm-6" style="margin-bottom:20px;">
+                <div style="background:rgba(255,255,255,0.08); border-radius:15px; padding:25px; text-align:center; border:1px solid rgba(255,255,255,0.1);">
+                    <div style="font-size:40px; margin-bottom:12px;">💰</div>
+                    <h5 style="color:white; font-weight:700; margin:0 0 8px 0;">Offerings</h5>
+                    <p style="color:rgba(255,255,255,0.6); font-size:13px; margin:0;">Easy ways to give your offerings via mobile money or bank</p>
+                </div>
+            </div>
+
+            <div class="col-md-4 col-sm-6" style="margin-bottom:20px;">
+                <div style="background:rgba(255,255,255,0.08); border-radius:15px; padding:25px; text-align:center; border:1px solid rgba(255,255,255,0.1);">
+                    <div style="font-size:40px; margin-bottom:12px;">👥</div>
+                    <h5 style="color:white; font-weight:700; margin:0 0 8px 0;">Member Management</h5>
+                    <p style="color:rgba(255,255,255,0.6); font-size:13px; margin:0;">Manage church members and their information</p>
+                </div>
+            </div>
+
+            <div class="col-md-4 col-sm-6" style="margin-bottom:20px;">
+                <div style="background:rgba(255,255,255,0.08); border-radius:15px; padding:25px; text-align:center; border:1px solid rgba(255,255,255,0.1);">
+                    <div style="font-size:40px; margin-bottom:12px;">📊</div>
+                    <h5 style="color:white; font-weight:700; margin:0 0 8px 0;">Attendance</h5>
+                    <p style="color:rgba(255,255,255,0.6); font-size:13px; margin:0;">Track member attendance for church services</p>
+                </div>
+            </div>
+
+            <div class="col-md-4 col-sm-6" style="margin-bottom:20px;">
+                <div style="background:rgba(255,255,255,0.08); border-radius:15px; padding:25px; text-align:center; border:1px solid rgba(255,255,255,0.1);">
+                    <div style="font-size:40px; margin-bottom:12px;">🏛️</div>
+                    <h5 style="color:white; font-weight:700; margin:0 0 8px 0;">Departments</h5>
+                    <p style="color:rgba(255,255,255,0.6); font-size:13px; margin:0;">Organize and manage church departments</p>
                 </div>
             </div>
         </div>
 
-        <div class="col-md-6 col-lg-4">
-            <div class="card h-100 border-0 shadow-sm rounded-3 extension-card">
-                <div class="card-body">
-                    <div class="d-flex align-items-center mb-3">
-                        <span class="extension-icon" aria-hidden="true">&#9881;</span>
-                        <h3 class="h6 fw-bold mb-0 ms-2">yii2-gii</h3>
-                    </div>
-                    <p class="text-body-secondary small mb-0">
-                        Automatic code generator for models, controllers, CRUD, forms, and modules.
-                        Boost your productivity with scaffolding.
-                    </p>
-                </div>
-                <div class="card-footer bg-transparent border-0 pt-0">
-                    <?= Html::a(
-                        'Learn more &raquo;',
-                        'https://www.yiiframework.com/extension/yiisoft/yii2-gii',
-                        [
-                            'class' => 'btn btn-sm btn-outline-secondary',
-                            'rel' => 'noopener',
-                            'target' => '_blank',
-                        ],
-                    ) ?>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-6 col-lg-4">
-            <div class="card h-100 border-0 shadow-sm rounded-3 extension-card">
-                <div class="card-body">
-                    <div class="d-flex align-items-center mb-3">
-                        <span class="extension-icon" aria-hidden="true">&#128203;</span>
-                        <h3 class="h6 fw-bold mb-0 ms-2">yii2-queue</h3>
-                    </div>
-                    <p class="text-body-secondary small mb-0">
-                        Asynchronous job queue with support for DB, Redis, AMQP, Beanstalk,
-                        and SQS drivers. Run background tasks with ease.
-                    </p>
-                </div>
-                <div class="card-footer bg-transparent border-0 pt-0">
-                    <?= Html::a(
-                        'Learn more &raquo;',
-                        'https://www.yiiframework.com/extension/yiisoft/yii2-queue',
-                        [
-                            'class' => 'btn btn-sm btn-outline-secondary',
-                            'rel' => 'noopener',
-                            'target' => '_blank',
-                        ],
-                    ) ?>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-6 col-lg-4">
-            <div class="card h-100 border-0 shadow-sm rounded-3 extension-card">
-                <div class="card-body">
-                    <div class="d-flex align-items-center mb-3">
-                        <span class="extension-icon" aria-hidden="true">&#9889;</span>
-                        <h3 class="h6 fw-bold mb-0 ms-2">yii2-redis</h3>
-                    </div>
-                    <p class="text-body-secondary small mb-0">
-                        Redis integration providing cache, session, and ActiveRecord support.
-                        Leverage in-memory storage for blazing-fast data access.
-                    </p>
-                </div>
-                <div class="card-footer bg-transparent border-0 pt-0">
-                    <?= Html::a(
-                        'Learn more &raquo;',
-                        'https://www.yiiframework.com/extension/yiisoft/yii2-redis',
-                        [
-                            'class' => 'btn btn-sm btn-outline-secondary',
-                            'rel' => 'noopener',
-                            'target' => '_blank',
-                        ],
-                    ) ?>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-6 col-lg-4">
-            <div class="card h-100 border-0 shadow-sm rounded-3 extension-card">
-                <div class="card-body">
-                    <div class="d-flex align-items-center mb-3">
-                        <span class="extension-icon" aria-hidden="true">&#128269;</span>
-                        <h3 class="h6 fw-bold mb-0 ms-2">yii2-elasticsearch</h3>
-                    </div>
-                    <p class="text-body-secondary small mb-0">
-                        Elasticsearch integration with ActiveRecord and query builder.
-                        Add powerful full-text search capabilities to your application.
-                    </p>
-                </div>
-                <div class="card-footer bg-transparent border-0 pt-0">
-                    <?= Html::a(
-                        'Learn more &raquo;',
-                        'https://www.yiiframework.com/extension/yiisoft/yii2-elasticsearch',
-                        [
-                            'class' => 'btn btn-sm btn-outline-secondary',
-                            'rel' => 'noopener',
-                            'target' => '_blank',
-                        ],
-                    ) ?>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-6 col-lg-4">
-            <div class="card h-100 border-0 shadow-sm rounded-3 extension-card">
-                <div class="card-body">
-                    <div class="d-flex align-items-center mb-3">
-                        <span class="extension-icon" aria-hidden="true">&#9993;</span>
-                        <h3 class="h6 fw-bold mb-0 ms-2">yii2-symfonymailer</h3>
-                    </div>
-                    <p class="text-body-secondary small mb-0">
-                        Email sending integration powered by Symfony Mailer.
-                        Compose and deliver rich HTML emails with attachments and templates.
-                    </p>
-                </div>
-                <div class="card-footer bg-transparent border-0 pt-0">
-                    <?= Html::a(
-                        'Learn more &raquo;',
-                        'https://github.com/yiisoft/yii2-symfonymailer',
-                        [
-                            'class' => 'btn btn-sm btn-outline-secondary',
-                            'rel' => 'noopener',
-                            'target' => '_blank',
-                        ],
-                    ) ?>
-                </div>
-            </div>
+        <!-- Bottom CTA -->
+        <div style="text-align:center; margin-top:20px; padding:30px; background:rgba(255,255,255,0.05); border-radius:15px; border:1px solid rgba(255,255,255,0.1);">
+            <h4 style="color:white; margin:0 0 10px 0;">Ready to get started?</h4>
+            <p style="color:rgba(255,255,255,0.6); margin:0 0 20px 0;">Join Faith Christian Church Management System today</p>
+            <?= Html::a('Create Account Now', ['/site/register'], [
+                'style' => 'background:linear-gradient(135deg, #667eea 0%, #764ba2 100%); color:white; padding:12px 35px; border-radius:25px; text-decoration:none; font-size:15px; font-weight:700; box-shadow:0 4px 15px rgba(102,126,234,0.4);'
+            ]) ?>
         </div>
     </div>
 
