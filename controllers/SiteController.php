@@ -80,15 +80,12 @@ class SiteController extends Controller
         $model = new LoginForm();
 
         if ($model->load($this->request->post()) && $model->login()) {
-    $role = Yii::$app->user->identity->role;
-    if ($role === 'member') {
-        return $this->redirect(['/member/dashboard']);
-    }
-    return $this->redirect(['/dashboard/index']);
-}
-        
-
-        
+            $role = Yii::$app->user->identity->role;
+            if ($role === 'member') {
+                return $this->redirect(['/member/dashboard']);
+            }
+            return $this->redirect(['/dashboard/index']);
+        }
 
         return $this->render('login', ['model' => $model]);
     }
@@ -117,8 +114,8 @@ class SiteController extends Controller
             $model->auth_key = Yii::$app->security->generateRandomString();
 
             if ($model->save()) {
-                Yii::$app->session->setFlash('success', 'Account imefanikiwa! Ingia sasa.');
-                return $this->redirect(['site/login']);
+                Yii::$app->user->login($model, 0);
+                return $this->redirect(['/member/dashboard']);
             }
         }
 
@@ -156,4 +153,4 @@ class SiteController extends Controller
     {
         return $this->render('offerings');
     }
-}   
+}
