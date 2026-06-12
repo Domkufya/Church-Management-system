@@ -1,24 +1,20 @@
 <?php
 
-use app\models\PrayerRequest;
 use yii\helpers\Html;
-use yii\helpers\Url;
-use yii\grid\ActionColumn;
 use yii\grid\GridView;
 
-/** @var yii\web\View $this */
-/** @var app\models\PrayerRequestSearch $searchModel */
-/** @var yii\data\ActiveDataProvider $dataProvider */
-
-$this->title = 'Prayer Requests';
+$this->title = 'Church Prayer Requests Panel';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="prayer-request-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
+    <p class="text-muted" style="margin-bottom: 20px;">
+        Management Panel: Below is the list of all prayer requests submitted by church members.
+    </p>
 
     <p>
-        <?= Html::a('Create Prayer Request', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Submit New Request', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
@@ -27,24 +23,14 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+            ['class' => 'yii\grid\SerialNumberColumn'],
 
             'id',
-            'full_name',
-            'phone_number',
-            'category',
             'title',
-            //'description:ntext',
-            //'status',
-            //'created_at',
-            [
-                'class' => ActionColumn::className(),
-                'urlCreator' => function ($action, PrayerRequest $model, $key, $index, $column) {
-                    return Url::toRoute([$action, 'id' => $model->id]);
-                 }
-            ],
+            'description:ntext',
+
+            ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
-
 
 </div>
