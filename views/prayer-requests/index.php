@@ -2,11 +2,13 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use yii\grid\SerialColumn;
+use yii\grid\ActionColumn;
 
 $this->title = 'Church Prayer Requests Panel';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="prayer-request-index">
+<div class="prayer-requests-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
     <p class="text-muted" style="margin-bottom: 20px;">
@@ -17,19 +19,18 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Html::a('Submit New Request', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-            ['class' => 'yii\grid\SerialNumberColumn'],
-
+            ['class' => SerialColumn::class],
             'id',
-            'title',
-            'description:ntext',
-
-            ['class' => 'yii\grid\ActionColumn'],
+            'member_id',
+            'request:ntext',
+            'is_anonymous',
+            'status',
+            'created_at',
+            ['class' => ActionColumn::class],
         ],
     ]); ?>
 
