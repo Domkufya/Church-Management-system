@@ -146,4 +146,37 @@ class AttendanceController extends Controller
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
+    public function actionTakeAttendance($event_id = null)
+{
+    $events = \app\models\Events::find()->all();
+    $members = \app\models\Members::find()->where(['status' => 'Active'])->all();
+    
+    if (Yii::$app->request->isPost) {
+        $post = Yii::$app->request->post();
+        $event_id = $post['event_id'];
+        $attendances = $post['attendance'] ?? [];
+        
+        // Delete existing attendance for this event
+        Attendance::deleteAll(['event_id' => $event_id]);
+        
+        // Save new attendance
+        foreach ($members as $member) {
+            $attendance = new Attendance();
+            $attendance->event_id = $event_id;
+            $attendance->member_id = $member->id;
+            $attendance->status = isset($attendances[$member->id]) ? 'Present' : 'Absent';
+            $attendance->recorded_at = date('Y-m-d H:i:s');
+            $attendance->save();
+        }
+        
+        Yii::$app->session->setFlash('success', 'Attendance saved successfully!');
+        return $this->redirect(['take-attendance', 'event_id' => $event_id]);
+    }
+    
+    return $this->render('take-attendance', [
+        'events' => $events,
+        'members' => $members,
+        'event_id' => $event_id,
+    ]);
+}
 }
