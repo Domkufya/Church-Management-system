@@ -4,11 +4,11 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /** @var yii\web\View $this */
-/** @var app\models\PrayerRequestsSearch $model */
+/** @var app\models\PrayerRequestSearch $model */
 /** @var yii\widgets\ActiveForm $form */
 ?>
 
-<div class="prayer-requests-search">
+<div class="prayer-request-search">
 
     <?php $form = ActiveForm::begin([
         'action' => ['index'],
@@ -17,13 +17,17 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'id') ?>
 
-    <?= $form->field($model, 'member_id') ?>
+    <?= $form->field($model, 'full_name') ?>
 
-    <?= $form->field($model, 'request') ?>
+    <?= $form->field($model, 'phone_number') ?>
 
-    <?= $form->field($model, 'is_anonymous') ?>
+    <?= $form->field($model, 'category') ?>
 
-    <?= $form->field($model, 'status') ?>
+    <?= $form->field($model, 'title') ?>
+
+    <?php // echo $form->field($model, 'description') ?>
+
+    <?php // echo $form->field($model, 'status') ?>
 
     <?php // echo $form->field($model, 'created_at') ?>
 
