@@ -12,72 +12,72 @@ use yii\widgets\ActiveForm;
 
     <div class="card shadow-lg border-0" style="border-radius: 16px; background-color: #ffffff !important; max-width: 750px; margin: 30px auto; overflow: hidden;">
         
-        <div class="card-header bg-primary text-white text-center" style="padding: 25px; border: none;">
-            <h3 class="mb-1 text-white" style="font-weight: 700; letter-spacing: 0.5px;">
-                <i class="fas fa-hand-holding-heart animate-pulse"></i> Submit New Prayer Request
-            </h3>
-            <p class="mb-0 text-white-50" style="font-size: 0.95rem;">Jaza fomu hii kwa umakini ili ombi lako lishughulikiwe.</p>
+        <div class="card-header text-white text-center" style="padding: 30px; border: none; background: linear-gradient(135deg, #4f8ef7, #7b2ff7);">
+            <div style="font-size: 3rem; margin-bottom: 10px;">🙏</div>
+            <h3 class="mb-1 text-white" style="font-weight: 700;">Submit New Prayer Request</h3>
+            <p class="mb-0" style="font-size: 0.95rem; opacity: 0.85;">Please fill in this form carefully so your request can be attended to.</p>
         </div>
 
-        <div class="card-body" style="padding: 40px; background-color: #ffffff !important;">
+        <div class="card-body" style="padding: 40px; background-color: #ffffff;">
 
             <?php $form = ActiveForm::begin([
                 'options' => ['class' => 'needs-validation'],
                 'fieldConfig' => [
-                    'template' => "{label}\n<div class='input-group'>{input}</div>\n{error}",
-                    // Kulazimisha lebo zote ziwe nyeusi nzito na zisomeke vizuri sana
-                    'labelOptions' => ['class' => 'form-label fw-bold', 'style' => 'color: #1a1a1a !important; font-size: 0.95rem; margin-bottom: 8px; font-weight: 600; display: inline-block;'],
-                    // Kulazimisha visanduku viwe na mpaka (border) wa kijivu na maandishi ya ndani yawe meusi
-                    'inputOptions' => ['class' => 'form-control form-control-lg', 'style' => 'border: 2px solid #e0e0e0 !important; color: #1a1a1a !important; background-color: #ffffff !important; font-size: 1rem; padding: 12px;'],
+                    'labelOptions' => ['class' => 'form-label fw-bold', 'style' => 'color: #1a1a1a; font-size: 0.95rem; margin-bottom: 8px;'],
+                    'inputOptions' => ['class' => 'form-control form-control-lg', 'style' => 'border: 2px solid #e0e0e0; color: #1a1a1a; background-color: #ffffff; font-size: 1rem; padding: 12px; border-radius: 10px;'],
                 ],
             ]); ?>
 
+            <!-- Member ID -->
             <div class="mb-4">
                 <?= $form->field($model, 'member_id', [
-                    'template' => "{label}\n<div class='input-group'><span class='input-group-text bg-light text-secondary' style='border: 2px solid #e0e0e0; border-right: none;'><i class='fas fa-user-tag'></i></span>{input}</div>\n{error}"
-                ])->textInput(['placeholder' => 'Example: M-1024', 'autocomplete' => 'off']) ?>
+                    'template' => "{label}\n<div class='input-group'><span class='input-group-text' style='border: 2px solid #e0e0e0; border-right: none; border-radius: 10px 0 0 10px; background:#f8f9fa;'>👤</span>{input}</div>\n{error}"
+                ])->textInput(['placeholder' => 'Enter your Member ID (e.g. 13)', 'autocomplete' => 'off', 'style' => 'border-radius: 0 10px 10px 0 !important;']) ?>
             </div>
 
+            <!-- Anonymous and Status -->
             <div class="row">
                 <div class="col-md-6 mb-4">
                     <?= $form->field($model, 'is_anonymous', [
-                        'template' => "{label}\n<div class='input-group'><span class='input-group-text bg-light text-secondary' style='border: 2px solid #e0e0e0; border-right: none;'><i class='fas fa-user-secret'></i></span>{input}</div>\n{error}"
+                        'template' => "{label}\n<div class='input-group'><span class='input-group-text' style='border: 2px solid #e0e0e0; border-right: none; border-radius: 10px 0 0 10px; background:#f8f9fa;'>🙈</span>{input}</div>\n{error}"
                     ])->dropDownList([
-                        0 => 'No (Show My Name / Onyesha Jina)',
-                        1 => 'Yes (Send Anonymously / Kwa Siri)',
-                    ], ['style' => 'border: 2px solid #e0e0e0 !important; color: #1a1a1a !important; background-color: #ffffff !important; height: auto;']) ?>
+                        0 => 'No — Show My Name',
+                        1 => 'Yes — Send Anonymously',
+                    ], ['style' => 'border: 2px solid #e0e0e0; color: #1a1a1a; background-color: #ffffff; border-radius: 0 10px 10px 0;']) ?>
                 </div>
                 
                 <div class="col-md-6 mb-4">
                     <?= $form->field($model, 'status', [
-                        'template' => "{label}\n<div class='input-group'><span class='input-group-text bg-light text-secondary' style='border: 2px solid #e0e0e0; border-right: none;'><i class='fas fa-sync-alt'></i></span>{input}</div>\n{error}"
+                        'template' => "{label}\n<div class='input-group'><span class='input-group-text' style='border: 2px solid #e0e0e0; border-right: none; border-radius: 10px 0 0 10px; background:#f8f9fa;'>📋</span>{input}</div>\n{error}"
                     ])->dropDownList([
-                        'Pending' => 'Pending (Inasubiri)',
-                        'Reviewed' => 'Under Review (Inapitiwa)',
-                        'Answered' => 'Answered (Imejibiwa)',
-                    ], ['style' => 'border: 2px solid #e0e0e0 !important; color: #1a1a1a !important; background-color: #ffffff !important; height: auto;']) ?>
+                        'Pending'  => '🕐 Pending',
+                        'Prayed'   => '🙏 Prayed',
+                        'Answered' => '✅ Answered',
+                    ], ['style' => 'border: 2px solid #e0e0e0; color: #1a1a1a; background-color: #ffffff; border-radius: 0 10px 10px 0;']) ?>
                 </div>
             </div>
 
+            <!-- Prayer Request Details -->
             <div class="mb-4">
-                <label class="form-label fw-bold" style="color: #1a1a1a !important; font-size: 0.95rem; margin-bottom: 8px; font-weight: 600;">Prayer Request Details</label>
                 <?= $form->field($model, 'request', [
-                    'template' => "{input}\n{error}",
+                    'template' => "{label}\n{input}\n{error}",
+                    'labelOptions' => ['class' => 'form-label fw-bold', 'style' => 'color: #1a1a1a; font-size: 0.95rem;'],
                 ])->textarea([
-                    'rows' => 6, 
-                    'style' => 'border: 2px solid #e0e0e0 !important; border-radius: 10px !important; color: #1a1a1a !important; background-color: #ffffff !important; font-size: 1rem; padding: 15px;', 
-                    'placeholder' => 'Andika hapa mambo yote unayoomba yafanyiwe kazi...'
+                    'rows' => 6,
+                    'style' => 'border: 2px solid #e0e0e0; border-radius: 10px; color: #1a1a1a; background-color: #ffffff; font-size: 1rem; padding: 15px; width: 100%;',
+                    'placeholder' => 'Write your prayer request here in detail...'
                 ]) ?>
             </div>
 
-            <div class="form-group mt-5 d-flex flex-column gap-2">
-                <?= Html::submitButton('<i class="fas fa-paper-plane me-2"></i> WASILISHA MAOMBI RASMI', [
-                    'class' => 'btn btn-primary btn-lg w-100',
-                    'style' => 'border-radius: 10px; font-weight: 700; letter-spacing: 0.5px; padding: 14px 20px; font-size: 1.1rem; box-shadow: 0 4px 6px rgba(0, 123, 255, 0.15); transition: all 0.3s ease;'
+            <!-- Buttons -->
+            <div class="mt-4 d-flex flex-column gap-2">
+                <?= Html::submitButton('🙏 SUBMIT PRAYER REQUEST', [
+                    'class' => 'btn btn-lg w-100',
+                    'style' => 'background: linear-gradient(135deg, #4f8ef7, #7b2ff7); color: #fff; border-radius: 10px; font-weight: 700; padding: 14px; font-size: 1.1rem; border: none;'
                 ]) ?>
-                <?= Html::a('Ghairi (Cancel)', ['index'], [
-                    'class' => 'btn btn-link text-center mt-2', 
-                    'style' => 'color: #6c757d !important; text-decoration: none; font-weight: 500; font-size: 0.95rem;'
+                <?= Html::a('← Cancel', ['index'], [
+                    'class' => 'btn btn-link text-center mt-2',
+                    'style' => 'color: #6c757d; text-decoration: none; font-weight: 500;'
                 ]) ?>
             </div>
 
@@ -89,32 +89,8 @@ use yii\widgets\ActiveForm;
 </div>
 
 <style>
-    .input-group-text {
-        border-radius: 10px 0 0 10px !important;
-        font-size: 1.1rem;
-    }
-    .form-control {
-        border-radius: 0 10px 10px 0 !important;
-    }
-    /* Mfumo ukiguswa (Focus State) ulete rangi ya bluu safi */
-    .form-control:focus {
-        border-color: #007bff !important;
-        box-shadow: 0 0 0 4px rgba(0, 123, 255, 0.15) !important;
-        background-color: #ffffff !important;
-        color: #1a1a1a !important;
-    }
-    .input-group:focus-within .input-group-text {
-        border-color: #007bff !important;
-        background-color: #e9ecef !important;
-        color: #007bff !important;
-    }
-    /* Uhuishaji mdogo wa icon ya kichwa (Pulse effect) */
-    .animate-pulse {
-        animation: pulse 2s infinite;
-    }
-    @keyframes pulse {
-        0% { transform: scale(1); }
-        50% { transform: scale(1.08); }
-        100% { transform: scale(1); }
-    }
+.form-control:focus {
+    border-color: #4f8ef7 !important;
+    box-shadow: 0 0 0 4px rgba(79, 142, 247, 0.15) !important;
+}
 </style>

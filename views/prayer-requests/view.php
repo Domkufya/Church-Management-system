@@ -4,15 +4,15 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /** @var yii\web\View $this */
-/** @var app\models\PrayerRequest $model */
+/** @var app\models\PrayerRequests $model */
 
-$this->title = $model->title;
+$this->title = 'Prayer Request #' . $model->id;
 $this->params['breadcrumbs'][] = ['label' => 'Prayer Requests', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>
-<div class="prayer-request-view">
 
+<div class="prayer-requests-view" style="padding: 20px;">
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
@@ -30,14 +30,11 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             'id',
-            'full_name',
-            'phone_number',
-            'category',
-            'title',
-            'description:ntext',
+            'member_id',
+            'request:ntext',
+            'is_anonymous',
             'status',
             'created_at',
         ],
     ]) ?>
-
 </div>
