@@ -1,5 +1,4 @@
 <?php
-
 namespace app\models;
 
 use yii\db\ActiveRecord;
@@ -33,14 +32,20 @@ class PrayerRequests extends ActiveRecord
             'created_at' => 'Created At',
         ];
     }
-    public function beforeSave($insert)
-{
-    if (parent::beforeSave($insert)) {
-        if ($this->isNewRecord) {
-            $this->created_at = date('Y-m-d H:i:s');
-        }
-        return true;
+
+    public function getMember()
+    {
+        return $this->hasOne(Members::class, ['id' => 'member_id']);
     }
-    return false;
-}
+
+    public function beforeSave($insert)
+    {
+        if (parent::beforeSave($insert)) {
+            if ($this->isNewRecord) {
+                $this->created_at = date('Y-m-d H:i:s');
+            }
+            return true;
+        }
+        return false;
+    }
 }

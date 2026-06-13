@@ -36,46 +36,38 @@ $this->params['breadcrumbs'][] = $this->title;
         ]) ?>
     </div>
 
-    <!-- TABLE -->
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'tableOptions' => ['class' => 'table table-hover align-middle', 'style' => 'background:#1e1e2e; color:#fff; border-radius:12px; overflow:hidden;'],
         'headerRowOptions' => ['style' => 'background:#2a2a4a; color:#fff;'],
-        'rowOptions' => ['style' => 'border-bottom: 1px solid rgba(255,255,255,0.1);'],
         'columns' => [
             ['class' => SerialColumn::class],
 
             [
-                'attribute' => 'member_id',
-                'label' => 'Member',
-                'contentOptions' => ['style' => 'color:#fff;'],
+                'label' => 'Member Name',
                 'headerOptions' => ['style' => 'color:#a0a0ff; background:#2a2a4a;'],
+                'contentOptions' => ['style' => 'color:#fff;'],
+                'format' => 'raw',
                 'value' => function($model) {
+                    if ($model->is_anonymous) {
+                        return '<span style="color:#aaa; font-style:italic;">🙈 Anonymous</span>';
+                    }
+                    if ($model->member && $model->member->first_name) {
+                        return '👤 ' . Html::encode($model->member->first_name . ' ' . $model->member->last_name);
+                    }
                     return '👤 Member #' . $model->member_id;
                 },
             ],
             [
                 'attribute' => 'request',
                 'label' => 'Prayer Request',
-                'contentOptions' => ['style' => 'color:#ccc; max-width:300px;'],
                 'headerOptions' => ['style' => 'color:#a0a0ff; background:#2a2a4a;'],
+                'contentOptions' => ['style' => 'color:#ccc; max-width:300px;'],
                 'value' => function($model) {
                     return strlen($model->request) > 80
                         ? substr($model->request, 0, 80) . '...'
                         : $model->request;
-                },
-            ],
-            [
-                'attribute' => 'is_anonymous',
-                'label' => 'Anonymous',
-                'headerOptions' => ['style' => 'color:#a0a0ff; background:#2a2a4a;'],
-                'format' => 'raw',
-                'value' => function($model) {
-                    if ($model->is_anonymous) {
-                        return '<span style="background:#555; color:#fff; padding:4px 10px; border-radius:20px; font-size:12px;">🙈 Yes</span>';
-                    }
-                    return '<span style="background:#2d6a4f; color:#fff; padding:4px 10px; border-radius:20px; font-size:12px;">👁 No</span>';
                 },
             ],
             [
@@ -93,6 +85,12 @@ $this->params['breadcrumbs'][] = $this->title;
                     return '<span style="background:' . $color . '; color:#fff; padding:4px 14px; border-radius:20px; font-size:12px; font-weight:bold;">'
                         . $model->status . '</span>';
                 },
+            ],
+            [
+                'attribute' => 'created_at',
+                'label' => 'Date',
+                'headerOptions' => ['style' => 'color:#a0a0ff; background:#2a2a4a;'],
+                'contentOptions' => ['style' => 'color:#ccc;'],
             ],
             [
                 'class' => ActionColumn::class,

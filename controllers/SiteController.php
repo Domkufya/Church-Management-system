@@ -8,6 +8,7 @@ use Yii;
 use app\models\ContactForm;
 use app\models\LoginForm;
 use app\models\User;
+use app\models\Members;
 use yii\captcha\CaptchaAction;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
@@ -114,8 +115,19 @@ class SiteController extends Controller
             $model->auth_key = Yii::$app->security->generateRandomString();
 
             if ($model->save()) {
-                Yii::$app->user->login($model, 0);
-                return $this->redirect(['/member/dashboard']);
+                $member = new Members();
+                $member->user_id = $model->id;
+                $member->first_name = $model->username;
+                $member->last_name = '';
+                $member->gender = 'Male';
+                $member->phone = '';
+                $member->email = $model->email;
+                $member->address = '';
+                $member->marital_status = 'Single';
+                $member->save(false);
+
+                Yii::$app->session->setFlash('success', 'Account created successfully! Please login.');
+                return $this->redirect(['site/login']);
             }
         }
 
