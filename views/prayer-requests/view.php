@@ -6,13 +6,13 @@ use yii\widgets\DetailView;
 /** @var yii\web\View $this */
 /** @var app\models\PrayerRequests $model */
 
-$this->title = $model->id;
+$this->title = 'Prayer Request #' . $model->id;
 $this->params['breadcrumbs'][] = ['label' => 'Prayer Requests', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>
-<div class="prayer-requests-view">
 
+<div class="prayer-requests-view" style="padding: 20px;">
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
@@ -37,5 +37,4 @@ $this->params['breadcrumbs'][] = $this->title;
             'created_at',
         ],
     ]) ?>
-
 </div>

@@ -5,11 +5,12 @@ use yii\helpers\Html;
 /** @var yii\web\View $this */
 /** @var app\models\PrayerRequests $model */
 
-$this->title = 'Create Prayer Requests';
+$this->title = 'Update Prayer Request: ' . $model->id;
 $this->params['breadcrumbs'][] = ['label' => 'Prayer Requests', 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
+$this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
+$this->params['breadcrumbs'][] = 'Update';
 ?>
-<div class="prayer-requests-create">
+<div class="prayer-requests-update">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
