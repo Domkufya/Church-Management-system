@@ -12,6 +12,12 @@ class Members extends ActiveRecord
         return 'members';
     }
 
+    
+    public function getName()
+    {
+        return $this->first_name . ' ' . $this->last_name;
+    }
+
     public function beforeSave($insert)
     {
         if ($insert) {
@@ -24,25 +30,27 @@ class Members extends ActiveRecord
     }
 
     public function upload()
-{
-    $file = UploadedFile::getInstance($this, 'photo');
-    if ($file) {
-        $fileName = 'member_' . time() . '.' . $file->extension;
-        $file->saveAs(\Yii::getAlias('@webroot') .'/uploads/' . $fileName);
-        $this->photo = $fileName;
-    }
-}
-   public function beforeDelete()
-{
-    if ($this->photo) {
-        $photoPath = \Yii::getAlias('@webroot') . '/uploads/' . $this->photo;
-        if (file_exists($photoPath)) {
-            unlink($photoPath);
+    {
+        $file = UploadedFile::getInstance($this, 'photo');
+        if ($file) {
+            $fileName = 'member_' . time() . '.' . $file->extension;
+            $file->saveAs(\Yii::getAlias('@webroot') . '/uploads/' . $fileName);
+            $this->photo = $fileName;
         }
     }
-    return parent::beforeDelete();
-}
-public function rules()
+
+    public function beforeDelete()
+    {
+        if ($this->photo) {
+            $photoPath = \Yii::getAlias('@webroot') . '/uploads/' . $this->photo;
+            if (file_exists($photoPath)) {
+                unlink($photoPath);
+            }
+        }
+        return parent::beforeDelete();
+    }
+
+    public function rules()
     {
         return [
             [['first_name', 'last_name', 'gender'], 'required'],
