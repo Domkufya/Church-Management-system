@@ -181,4 +181,6 @@ class events extends \yii\db\ActiveRecord
     }
     return false;
 }
+
 }
+

@@ -165,4 +165,9 @@ class SiteController extends Controller
     {
         return $this->render('offerings');
     }
+    public function actionProfile(): string
+{
+    $user = Yii::$app->user->identity;
+    return $this->render('profile', ['user' => $user]);
+}
 }

@@ -36,7 +36,7 @@ $this->title = 'Member Dashboard';
                 <div style="font-size:40px; margin-bottom:10px;">💰</div>
                 <h5 style="color:#f6c23e; font-weight:700; margin:0 0 8px 0;">Offerings</h5>
                 <p style="color:#888; font-size:13px; margin:0 0 15px 0;">View your offering records</p>
-                <?= Html::a('View →', ['/member/offerings'], ['style' => 'background:#f6c23e; color:white; padding:8px 20px; border-radius:20px; text-decoration:none; font-size:13px; font-weight:600;']) ?>
+                <?= Html::a('View →', ['/site/offerings'], ['style' => 'background:#f6c23e; color:white; padding:8px 20px; border-radius:20px; text-decoration:none; font-size:13px; font-weight:600;']) ?>
             </div>
         </div>
 
@@ -54,7 +54,7 @@ $this->title = 'Member Dashboard';
                 <div style="font-size:40px; margin-bottom:10px;">👤</div>
                 <h5 style="color:#e74c3c; font-weight:700; margin:0 0 8px 0;">My Profile</h5>
                 <p style="color:#888; font-size:13px; margin:0 0 15px 0;">View & update your profile</p>
-                <?= Html::a('View →', ['/member/profile'], ['style' => 'background:#e74c3c; color:white; padding:8px 20px; border-radius:20px; text-decoration:none; font-size:13px; font-weight:600;']) ?>
+                <?= Html::a('View →', ['/site/profile'], ['style' => 'background:#e74c3c; color:white; padding:8px 20px; border-radius:20px; text-decoration:none; font-size:13px; font-weight:600;']) ?>
             </div>
         </div>
 
