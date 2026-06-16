@@ -1,5 +1,6 @@
 <?php
 
+<<<<<<< HEAD
 use app\models\Attendance;
 use yii\helpers\Html;
 use yii\helpers\Url;
@@ -64,3 +65,24 @@ $this->params['breadcrumbs'][] = $this->title;
     ]); ?>
 
 </div>
+=======
+use yii\helpers\Html;
+
+/** @var yii\web\View $this */
+/** @var app\models\Attendance $model */
+
+$this->title = 'Update Attendance: ' . $model->id;
+$this->params['breadcrumbs'][] = ['label' => 'Attendances', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
+$this->params['breadcrumbs'][] = 'Update';
+?>
+<div class="attendance-update">
+
+    <h1><?= Html::encode($this->title) ?></h1>
+
+    <?= $this->render('_form', [
+        'model' => $model,
+    ]) ?>
+
+</div>
+>>>>>>> 0d46a0fcdcb6d4281e54097fa87b0072ffa3986e

@@ -1,4 +1,5 @@
 <?php
+<<<<<<< HEAD
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\grid\SerialColumn;
@@ -183,3 +184,51 @@ $this->title = 'Attendance List';
     color: #ffffff !important;
 }
 </style>
+=======
+
+use app\models\Attendance;
+use yii\helpers\Html;
+use yii\helpers\Url;
+use yii\grid\ActionColumn;
+use yii\grid\GridView;
+
+/** @var yii\web\View $this */
+/** @var app\models\AttendanceSearch $searchModel */
+/** @var yii\data\ActiveDataProvider $dataProvider */
+
+$this->title = 'Attendances';
+$this->params['breadcrumbs'][] = $this->title;
+?>
+<div class="attendance-index">
+
+    <h1><?= Html::encode($this->title) ?></h1>
+
+    <p>
+        <?= Html::a('Create Attendance', ['create'], ['class' => 'btn btn-success']) ?>
+    </p>
+
+    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+
+    <?= GridView::widget([
+        'dataProvider' => $dataProvider,
+        'filterModel' => $searchModel,
+        'columns' => [
+            ['class' => 'yii\grid\SerialColumn'],
+
+            'id',
+            'event_id',
+            'member_id',
+            'status',
+            'recorded_at',
+            [
+                'class' => ActionColumn::className(),
+                'urlCreator' => function ($action, Attendance $model, $key, $index, $column) {
+                    return Url::toRoute([$action, 'id' => $model->id]);
+                 }
+            ],
+        ],
+    ]); ?>
+
+
+</div>
+>>>>>>> 0d46a0fcdcb6d4281e54097fa87b0072ffa3986e

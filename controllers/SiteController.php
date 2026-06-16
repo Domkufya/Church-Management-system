@@ -35,10 +35,17 @@ class SiteController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::class,
+<<<<<<< HEAD
                 'only' => ['logout'],
                 'rules' => [
                     [
                         'actions' => ['logout'],
+=======
+                'only' => ['logout', 'profile'],
+                'rules' => [
+                    [
+                        'actions' => ['logout', 'profile'],
+>>>>>>> 0d46a0fcdcb6d4281e54097fa87b0072ffa3986e
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -109,7 +116,11 @@ class SiteController extends Controller
             $post = Yii::$app->request->post();
             $model->username = $post['User']['username'];
             $model->email = $post['User']['email'];
+<<<<<<< HEAD
             $model->role = 'member';
+=======
+            $model->role = $post['User']['role'] ?? 'member';
+>>>>>>> 0d46a0fcdcb6d4281e54097fa87b0072ffa3986e
             $model->status = 1;
             $model->setPassword($post['User']['password_hash']);
             $model->auth_key = Yii::$app->security->generateRandomString();
@@ -165,9 +176,106 @@ class SiteController extends Controller
     {
         return $this->render('offerings');
     }
+<<<<<<< HEAD
     public function actionProfile(): string
 {
     $user = Yii::$app->user->identity;
     return $this->render('profile', ['user' => $user]);
 }
+=======
+
+    public function actionProfile()
+    {
+        $user = Yii::$app->user->identity;
+        if (!$user) {
+            return $this->goHome();
+        }
+
+        $member = Members::findOne(['user_id' => $user->id]);
+        if (!$member) {
+            $member = new Members();
+            $member->user_id = $user->id;
+            $member->first_name = $user->username;
+            $member->last_name = '';
+            $member->gender = 'Male';
+            $member->email = $user->email;
+            $member->save(false);
+        }
+
+        if (Yii::$app->request->isPost) {
+            $post = Yii::$app->request->post();
+            
+            if (isset($post['User'])) {
+                $user->username = $post['User']['username'] ?? $user->username;
+                $user->email = $post['User']['email'] ?? $user->email;
+                if (!empty($post['User']['password_new'])) {
+                    $user->setPassword($post['User']['password_new']);
+                }
+                $user->save();
+            }
+
+            // Temporarily store the current photo attribute value
+            $currentPhoto = $member->photo;
+
+            if ($member->load($this->request->post())) {
+                $capturedPhoto = Yii::$app->request->post('captured_photo');
+                if ($capturedPhoto && strpos($capturedPhoto, 'data:image') === 0) {
+                    $data = explode(',', $capturedPhoto);
+                    if (count($data) === 2) {
+                        $decodedImage = base64_decode($data[1]);
+                        $fileName = 'member_cam_' . time() . '.jpg';
+                        $uploadPath = Yii::getAlias('@webroot') . '/uploads/' . $fileName;
+                        
+                        if (!is_dir(dirname($uploadPath))) {
+                            mkdir(dirname($uploadPath), 0777, true);
+                        }
+                        
+                        if (file_put_contents($uploadPath, $decodedImage)) {
+                            if ($currentPhoto) {
+                                $oldPath = Yii::getAlias('@webroot') . '/uploads/' . $currentPhoto;
+                                if (file_exists($oldPath)) {
+                                    @unlink($oldPath);
+                                }
+                            }
+                            $member->photo = $fileName;
+                        }
+                    }
+                } else {
+                    $file = \yii\web\UploadedFile::getInstance($member, 'photo');
+                    if ($file) {
+                        $fileName = 'member_' . time() . '.' . $file->extension;
+                        $uploadPath = Yii::getAlias('@webroot') . '/uploads/' . $fileName;
+                        
+                        if (!is_dir(dirname($uploadPath))) {
+                            mkdir(dirname($uploadPath), 0777, true);
+                        }
+                        
+                        if ($file->saveAs($uploadPath)) {
+                            if ($currentPhoto) {
+                                $oldPath = Yii::getAlias('@webroot') . '/uploads/' . $currentPhoto;
+                                if (file_exists($oldPath)) {
+                                    @unlink($oldPath);
+                                }
+                            }
+                            $member->photo = $fileName;
+                        }
+                    } else {
+                        // Restore photo attribute value if no new photo uploaded/captured
+                        $member->photo = $currentPhoto;
+                    }
+                }
+
+                if ($member->save(false)) {
+                    Yii::$app->session->setFlash('success', 'Profile updated successfully!');
+                    return $this->refresh();
+                }
+            }
+        }
+
+        return $this->render('profile', [
+            'user' => $user,
+            'member' => $member,
+        ]);
+    }
+>>>>>>> 0d46a0fcdcb6d4281e54097fa87b0072ffa3986e
 }

@@ -45,6 +45,22 @@ $this->title = 'Register';
                     ]) ?>
                 </div>
 
+<<<<<<< HEAD
+=======
+                <div style="margin-bottom:18px;">
+                    <label style="font-size:13px; font-weight:600; color:#555; display:block; margin-bottom:6px;">🎭 Role / Position</label>
+                    <?= $form->field($model, 'role', ['template' => '{input}{error}'])->dropDownList([
+                        'member' => 'Member',
+                        'pastor' => 'Pastor',
+                        'secretary' => 'Secretary',
+                        'treasurer' => 'Treasurer',
+                        'admin' => 'Administrator',
+                    ], [
+                        'style' => 'width:100%; padding:12px 15px; border:2px solid #e0e0e0; border-radius:10px; font-size:14px; outline:none; box-sizing:border-box; background:white;',
+                    ]) ?>
+                </div>
+
+>>>>>>> 0d46a0fcdcb6d4281e54097fa87b0072ffa3986e
                 <div style="margin-bottom:25px;">
                     <label style="font-size:13px; font-weight:600; color:#555; display:block; margin-bottom:6px;">🔒 Password</label>
                     <?= $form->field($model, 'password_hash', ['template' => '{input}{error}'])->passwordInput([

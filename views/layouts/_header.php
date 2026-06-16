@@ -15,9 +15,14 @@ if ($role === 'member') {
         ['label' => 'Home', 'url' => ['/member/dashboard']],
         ['label' => 'Announcements', 'url' => ['/events/index']],
         ['label' => 'Prayer Requests', 'url' => ['/prayer-requests/index']],
+<<<<<<< HEAD
         ['label' => 'Departments', 'url' => ['/departments/index']],
         ['label' => 'Offerings', 'url' => ['/site/offerings']],
         ['label' => 'Profile', 'url' => ['/users/view', 'id' => Yii::$app->user->id]],
+=======
+        ['label' => 'Offerings', 'url' => ['/site/offerings']],
+        ['label' => 'Profile', 'url' => ['/site/profile']],
+>>>>>>> 0d46a0fcdcb6d4281e54097fa87b0072ffa3986e
         [
             'label' => 'Logout (' . Html::encode(Yii::$app->user->identity->username) . ')',
             'url' => ['/site/logout'],
@@ -46,6 +51,14 @@ if ($role === 'member') {
             ],
         ],
         [
+<<<<<<< HEAD
+=======
+            'label' => 'Profile',
+            'url' => ['/site/profile'],
+            'visible' => !Yii::$app->user->isGuest,
+        ],
+        [
+>>>>>>> 0d46a0fcdcb6d4281e54097fa87b0072ffa3986e
             'label' => 'Login',
             'url' => ['/site/login'],
             'visible' => Yii::$app->user->isGuest,

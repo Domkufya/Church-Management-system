@@ -181,6 +181,10 @@ class events extends \yii\db\ActiveRecord
     }
     return false;
 }
+<<<<<<< HEAD
 
 }
 
+=======
+}
+>>>>>>> 0d46a0fcdcb6d4281e54097fa87b0072ffa3986e
