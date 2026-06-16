@@ -15,6 +15,7 @@ if ($role === 'member') {
         ['label' => 'Home', 'url' => ['/member/dashboard']],
         ['label' => 'Announcements', 'url' => ['/events/index']],
         ['label' => 'Prayer Requests', 'url' => ['/prayer-requests/index']],
+        ['label' => 'Departments', 'url' => ['/departments/index']],
         ['label' => 'Offerings', 'url' => ['/site/offerings']],
         ['label' => 'Profile', 'url' => ['/users/view', 'id' => Yii::$app->user->id]],
         [

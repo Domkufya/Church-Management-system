@@ -57,6 +57,14 @@ $this->title = 'Member Dashboard';
                 <?= Html::a('View →', ['/site/profile'], ['style' => 'background:#e74c3c; color:white; padding:8px 20px; border-radius:20px; text-decoration:none; font-size:13px; font-weight:600;']) ?>
             </div>
         </div>
+      <div class="col-md-3 col-sm-6" style="margin-bottom:20px;">
+    <div style="background:#fff; border-radius:12px; padding:25px 20px; box-shadow:0 3px 12px rgba(0,0,0,0.08); border-top:4px solid #36b9cc; text-align:center;">
+        <div style="font-size:40px; margin-bottom:10px;">🏛️</div>
+        <h5 style="color:#36b9cc; font-weight:700; margin:0 0 8px 0;">Departments</h5>
+        <p style="color:#888; font-size:13px; margin:0 0 15px 0;">Join a church department</p>
+        <?= Html::a('View →', ['/departments/index'], ['style' => 'background:#36b9cc; color:white; padding:8px 20px; border-radius:20px; text-decoration:none; font-size:13px; font-weight:600;']) ?>
+    </div>
+</div>  
 
     </div>
 

@@ -25,6 +25,12 @@ class DepartmentsController extends Controller
                 'class' => \yii\filters\AccessControl::class,
                 'rules' => [
                     [
+                        'actions' => ['index', 'view', 'join'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                    [
+                        'actions' => ['create', 'update', 'delete'],
                         'allow' => true,
                         'roles' => ['@'],
                         'matchCallback' => function ($rule, $action) {
@@ -40,6 +46,7 @@ class DepartmentsController extends Controller
                 'class' => \yii\filters\VerbFilter::class,
                 'actions' => [
                     'delete' => ['POST'],
+                    'join' => ['POST'],
                 ],
             ],
         ]
@@ -146,4 +153,34 @@ class DepartmentsController extends Controller
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
+    public function actionJoin($id)
+{
+    $member = \app\models\Members::findOne(['user_id' => Yii::$app->user->id]);
+    
+    if (!$member) {
+        Yii::$app->session->setFlash('error', 'Member profile not found!');
+        return $this->redirect(['index']);
+    }
+
+    $existing = \app\models\MemberDepartments::findOne([
+        'member_id' => $member->id,
+        'department_id' => $id,
+    ]);
+
+    if ($existing) {
+        Yii::$app->session->setFlash('error', 'You have already requested to join this department!');
+        return $this->redirect(['index']);
+    }
+
+    $join = new \app\models\MemberDepartments();
+    $join->member_id = $member->id;
+    $join->department_id = $id;
+    $join->status = 'Pending';
+
+    if ($join->save()) {
+        Yii::$app->session->setFlash('success', 'Request sent! Waiting for admin approval.');
+    }
+
+    return $this->redirect(['index']);
+}
 }

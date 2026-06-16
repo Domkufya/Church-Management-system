@@ -15,7 +15,7 @@ use Yii;
  * @property Departments $department
  * @property Members $member
  */
-class member_derpartments extends \yii\db\ActiveRecord
+class member_Departments extends \yii\db\ActiveRecords
 {
 
 
