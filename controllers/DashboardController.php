@@ -32,32 +32,37 @@ class DashboardController extends Controller
     }
 
     public function actionIndex()
-    {
-        $stats = [
-            'members'        => Members::find()->count(),
-            'departments'    => Departments::find()->count(),
-            'offerings'      => Offerings::find()->sum('amount') ?? 0,
-            'expenses'       => Expenses::find()->sum('amount') ?? 0,
-            'prayer_requests'=> PrayerRequests::find()->count(),
-            'children'       => Children::find()->count(),
-            'attendance'     => Attendance::find()->count(),
-            'events'         => Events::find()->count(),
-        ];
+{
+    $stats = [
+        'members'        => Members::find()->count(),
+        'departments'    => Departments::find()->count(),
+        'offerings'      => Offerings::find()->sum('amount') ?? 0,
+        'expenses'       => Expenses::find()->sum('amount') ?? 0,
+        'prayer_requests'=> PrayerRequests::find()->count(),
+        'children'       => Children::find()->count(),
+        'attendance'     => Attendance::find()->count(),
+        'events'         => Events::find()->count(),
+    ];
 
-        $recent_events = Events::find()
-            ->orderBy(['id' => SORT_DESC])
-            ->limit(5)
-            ->all();
+    $recent_events = Events::find()
+        ->orderBy(['id' => SORT_DESC])
+        ->limit(5)
+        ->all();
 
-        $recent_members = Members::find()
-            ->orderBy(['id' => SORT_DESC])
-            ->limit(5)
-            ->all();
+    $recent_members = Members::find()
+        ->orderBy(['id' => SORT_DESC])
+        ->limit(5)
+        ->all();
 
-        return $this->render('index', [
-            'stats'          => $stats,
-            'recent_events'  => $recent_events,
-            'recent_members' => $recent_members,
-        ]);
-    }
+    $pending_requests = \app\models\MemberDepartments::find()
+        ->where(['status' => 'Pending'])
+        ->count();
+
+    return $this->render('index', [
+        'stats'           => $stats,
+        'recent_events'   => $recent_events,
+        'recent_members'  => $recent_members,
+        'pending_requests' => $pending_requests,
+    ]);
+}
 }

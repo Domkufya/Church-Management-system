@@ -8,6 +8,7 @@ use yii\filters\AccessControl;
 use app\models\Events;
 use app\models\PrayerRequests;
 use app\models\Members;
+use app\models\MemberDepartments;
 
 class MemberController extends Controller
 {
@@ -34,26 +35,29 @@ class MemberController extends Controller
             return $this->redirect(['/dashboard/index']);
         }
 
-        $member = Members::findOne(['user_id' => $user->id]);
-
-        $prayers = [];
-        if ($member) {
-            $prayers = PrayerRequests::find()
-                ->where(['member_id' => $member->id])
-                ->orderBy(['id' => SORT_DESC])
-                ->limit(5)
-                ->all();
-        }
-
         $events = Events::find()
             ->orderBy(['id' => SORT_DESC])
             ->limit(5)
             ->all();
 
+        $prayers = PrayerRequests::find()
+            ->orderBy(['id' => SORT_DESC])
+            ->limit(5)
+            ->all();
+
+        $member = Members::findOne(['user_id' => $user->id]);
+        $dept_notification = null;
+        if ($member) {
+            $dept_notification = MemberDepartments::findOne([
+                'member_id' => $member->id,
+            ]);
+        }
+
         return $this->render('dashboard', [
             'events' => $events,
             'prayers' => $prayers,
             'user' => $user,
+            'dept_notification' => $dept_notification,
         ]);
     }
 
