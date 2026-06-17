@@ -18,8 +18,7 @@ class Attendance extends \yii\db\ActiveRecord
     {
         return [
             [['status'], 'default', 'value' => self::STATUS_PRESENT],
-            [['event_id'], 'required', 'message' => 'Please select the event.'],
-            [['member_id'], 'required'],
+            [['event_id', 'member_id'], 'required'],
             [['event_id', 'member_id'], 'integer'],
             [['status'], 'string'],
             [['recorded_at'], 'safe'],
@@ -56,6 +55,31 @@ class Attendance extends \yii\db\ActiveRecord
             self::STATUS_PRESENT => 'Present',
             self::STATUS_ABSENT => 'Absent',
         ];
+    }
+
+    public function displayStatus()
+    {
+        return self::optsStatus()[$this->status] ?? $this->status;
+    }
+
+    public function isStatusPresent()
+    {
+        return $this->status === self::STATUS_PRESENT;
+    }
+
+    public function setStatusToPresent()
+    {
+        $this->status = self::STATUS_PRESENT;
+    }
+
+    public function isStatusAbsent()
+    {
+        return $this->status === self::STATUS_ABSENT;
+    }
+
+    public function setStatusToAbsent()
+    {
+        $this->status = self::STATUS_ABSENT;
     }
 
     public function beforeSave($insert)

@@ -12,6 +12,17 @@ $this->title = 'Dashboard';
         <p style="margin:5px 0 0 0; opacity:0.85;">Welcome back, <?= Html::encode(Yii::$app->user->identity->username) ?>! — <?= date('l, d F Y') ?></p>
     </div>
 
+    <?php if ($pending_requests > 0): ?>
+<div style="background:#fff3cd; border:1px solid #ffc107; border-radius:10px; padding:15px 20px; margin-bottom:20px; display:flex; justify-content:space-between; align-items:center;">
+    <span style="color:#856404; font-weight:600;">⚠️ You have <strong><?= $pending_requests ?></strong> pending department join request(s)!</span>
+    <?= \yii\helpers\Html::a('Review Requests →', ['/departments/requests'], [
+        'style' => 'background:#ffc107; color:#333; padding:8px 18px; border-radius:8px; text-decoration:none; font-weight:700; font-size:13px;'
+    ]) ?>
+</div>
+<?php endif; ?>
+
+
+
     <!-- Stats Cards -->
     <div class="row">
         <div class="col-md-3 col-sm-6" style="margin-bottom: 20px;">

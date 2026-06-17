@@ -8,6 +8,7 @@ use yii\filters\AccessControl;
 use app\models\Events;
 use app\models\PrayerRequests;
 use app\models\Members;
+use app\models\MemberDepartments;
 
 class MemberController extends Controller
 {
@@ -34,15 +35,10 @@ class MemberController extends Controller
             return $this->redirect(['/dashboard/index']);
         }
 
+        // Zuia member asiyejaza profile
         $member = Members::findOne(['user_id' => $user->id]);
-
-        $prayers = [];
-        if ($member) {
-            $prayers = PrayerRequests::find()
-                ->where(['member_id' => $member->id])
-                ->orderBy(['id' => SORT_DESC])
-                ->limit(5)
-                ->all();
+        if (!$member) {
+            return $this->redirect(['/site/complete-profile']);
         }
 
         $events = Events::find()
@@ -50,10 +46,20 @@ class MemberController extends Controller
             ->limit(5)
             ->all();
 
+        $prayers = PrayerRequests::find()
+            ->orderBy(['id' => SORT_DESC])
+            ->limit(5)
+            ->all();
+
+        $dept_notification = MemberDepartments::findOne([
+            'member_id' => $member->id,
+        ]);
+
         return $this->render('dashboard', [
             'events' => $events,
             'prayers' => $prayers,
             'user' => $user,
+            'dept_notification' => $dept_notification,
         ]);
     }
 
@@ -82,8 +88,8 @@ class MemberController extends Controller
         $member = Members::findOne(['user_id' => $user->id]);
 
         if (!$member) {
-            Yii::$app->session->setFlash('error', 'Your account is not linked to a member record. Please contact admin.');
-            return $this->redirect(['member/dashboard']);
+            Yii::$app->session->setFlash('error', 'Please complete your profile first!');
+            return $this->redirect(['/site/complete-profile']);
         }
 
         $model = new PrayerRequests();

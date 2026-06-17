@@ -17,35 +17,24 @@ class AttendanceController extends Controller
 {
     public function behaviors()
     {
-        return array_merge(
-            parent::behaviors(),
-            [
-                'access' => [
-                    'class' => AccessControl::class,
-                    'rules' => [
-                        // Member is allowed to register only
-                        ['actions' => ['create'], 'allow' => true, 'roles' => ['@']], 
-                        
-                        // Admin is the only one allowed to perform other actions
-                        [
-                            'actions' => ['index', 'update-status', 'delete'],
-                            'allow' => true,
-                            'roles' => ['@'],
-                            'matchCallback' => function ($rule, $action) {
-                                return Yii::$app->user->identity->role !== 'member';
-                            },
-                        ],
+        return [
+            'access' => [
+                'class' => AccessControl::class,
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
                     ],
                 ],
-                'verbs' => [
-                    'class' => VerbFilter::class,
-                    'actions' => [
-                        'delete' => ['POST'],
-                        'update-status' => ['POST'],
-                    ],
+            ],
+            'verbs' => [
+                'class' => VerbFilter::class,
+                'actions' => [
+                    'delete' => ['POST'],
+                    'update-status' => ['POST'],
                 ],
-            ]
-        );
+            ],
+        ];
     }
 
     public function actionIndex()
@@ -59,19 +48,27 @@ class AttendanceController extends Controller
         ]);
     }
 
+    public function actionView($id)
+    {
+        return $this->render('view', [
+            'model' => $this->findModel($id),
+        ]);
+    }
+
     public function actionCreate()
     {
         $model = new Attendance();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            // Alert that the submission is successfully
-            Yii::$app->session->setFlash('success', 'Hongera! Mahudhurio yako yamesajiliwa kikamilifu.');
+            Yii::$app->session->setFlash('success', 'Attendance saved successfully!');
             return $this->redirect(['create']);
         }
 
-        $memberList = ArrayHelper::map(Members::find()->all(), 'id', function($member) {
-            return $member->first_name . ' ' . $member->last_name;
-        });
+        $memberList = ArrayHelper::map(
+            Members::find()->all(),
+            'id',
+            fn($m) => $m->first_name . ' ' . $m->last_name
+        );
 
         return $this->render('create', [
             'model' => $model,
@@ -83,20 +80,58 @@ class AttendanceController extends Controller
     {
         $model = $this->findModel($id);
         $model->status = $status;
-        
+
         if ($model->save()) {
-            Yii::$app->session->setFlash('success', 'Attendance status updated to ' . $status);
-        } else {
-            Yii::$app->session->setFlash('error', 'Failed to update status.');
+            Yii::$app->session->setFlash('success', 'Status updated');
         }
+
         return $this->redirect(['index']);
+    }
+
+    public function actionDelete($id)
+    {
+        $this->findModel($id)->delete();
+        return $this->redirect(['index']);
+    }
+
+    public function actionTakeAttendance($event_id = null)
+    {
+        $events = Events::find()->all();
+        $members = Members::find()->where(['status' => 'Active'])->all();
+
+        if (Yii::$app->request->isPost) {
+            $post = Yii::$app->request->post();
+            $event_id = $post['event_id'];
+            $attendances = $post['attendance'] ?? [];
+
+            Attendance::deleteAll(['event_id' => $event_id]);
+
+            foreach ($members as $member) {
+                $attendance = new Attendance();
+                $attendance->event_id = $event_id;
+                $attendance->member_id = $member->id;
+                $attendance->status = isset($attendances[$member->id]) ? 'Present' : 'Absent';
+                $attendance->recorded_at = date('Y-m-d H:i:s');
+                $attendance->save();
+            }
+
+            Yii::$app->session->setFlash('success', 'Attendance saved!');
+            return $this->redirect(['take-attendance', 'event_id' => $event_id]);
+        }
+
+        return $this->render('take-attendance', [
+            'events' => $events,
+            'members' => $members,
+            'event_id' => $event_id,
+        ]);
     }
 
     protected function findModel($id)
     {
-        if (($model = Attendance::findOne(['id' => $id])) !== null) {
+        if (($model = Attendance::findOne($id)) !== null) {
             return $model;
         }
+
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 }

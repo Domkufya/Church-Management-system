@@ -5,6 +5,7 @@ use yii\helpers\Html;
 /** @var yii\web\View $this */
 /** @var app\models\Attendance $model */
 
+<<<<<<< HEAD
 $this->title = 'Register Attendance';
 $this->params['breadcrumbs'][] = ['label' => 'Attendances', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
@@ -19,9 +20,22 @@ $this->params['breadcrumbs'][] = $this->title;
     <p style="color: #666;">
         Please select the event you are attending to confirm your presence.
     </p>
+=======
+$this->title = 'Create Attendance';
+$this->params['breadcrumbs'][] = ['label' => 'Attendances', 'url' => ['index']];
+$this->params['breadcrumbs'][] = $this->title;
+?>
+<div class="attendance-create">
+
+    <h1><?= Html::encode($this->title) ?></h1>
+>>>>>>> 0d46a0fcdcb6d4281e54097fa87b0072ffa3986e
 
     <?= $this->render('_form', [
         'model' => $model,
     ]) ?>
 
+<<<<<<< HEAD
 </div>
+=======
+</div>
+>>>>>>> 0d46a0fcdcb6d4281e54097fa87b0072ffa3986e

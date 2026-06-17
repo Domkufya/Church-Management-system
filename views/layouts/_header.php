@@ -16,7 +16,8 @@ if ($role === 'member') {
         ['label' => 'Announcements', 'url' => ['/events/index']],
         ['label' => 'Prayer Requests', 'url' => ['/prayer-requests/index']],
         ['label' => 'Offerings', 'url' => ['/site/offerings']],
-        ['label' => 'Profile', 'url' => ['/users/view', 'id' => Yii::$app->user->id]],
+        ['label' => 'Departments', 'url' => ['/departments/index']],
+        ['label' => 'Profile', 'url' => ['/site/profile']],
         [
             'label' => 'Logout (' . Html::encode(Yii::$app->user->identity->username) . ')',
             'url' => ['/site/logout'],
@@ -62,7 +63,7 @@ if ($role === 'member') {
     <?php NavBar::begin([
         'brandLabel' => Yii::$app->name,
         'brandUrl' => Yii::$app->homeUrl,
-        'options' => ['class' => 'navbar-expand-md navbar-dark bg-dark fixed-top']
+        'options' => ['class' => 'navbar-expand-md navbar-dark bg-dark fixed-top'],
     ]) ?>
     <?= Nav::widget([
         'options' => ['class' => 'navbar-nav me-auto'],

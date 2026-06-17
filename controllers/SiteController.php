@@ -115,23 +115,48 @@ class SiteController extends Controller
             $model->auth_key = Yii::$app->security->generateRandomString();
 
             if ($model->save()) {
-                $member = new Members();
-                $member->user_id = $model->id;
-                $member->first_name = $model->username;
-                $member->last_name = '';
-                $member->gender = 'Male';
-                $member->phone = '';
-                $member->email = $model->email;
-                $member->address = '';
-                $member->marital_status = 'Single';
-                $member->save(false);
-
-                Yii::$app->session->setFlash('success', 'Account created successfully! Please login.');
-                return $this->redirect(['site/login']);
+                Yii::$app->user->login($model, 0);
+                return $this->redirect(['/site/complete-profile']);
             }
         }
 
         return $this->render('register', ['model' => $model]);
+    }
+
+    public function actionCompleteProfile(): Response|string
+    {
+        if (Yii::$app->user->isGuest) {
+            return $this->redirect(['site/login']);
+        }
+
+        $model = new Members();
+
+        if (Yii::$app->request->isPost) {
+            $model->load(Yii::$app->request->post());
+
+            // Check age — lazima awe na miaka 18+
+            if (!empty($model->dob)) {
+                $dob = new \DateTime($model->dob);
+                $today = new \DateTime();
+                $age = $today->diff($dob)->y;
+
+                if ($age < 18) {
+                    Yii::$app->session->setFlash('error', 'You must be at least 18 years old to register.');
+                    return $this->render('complete-profile', ['model' => $model]);
+                }
+            }
+
+            $model->user_id = Yii::$app->user->id;
+            $model->status = 'Active';
+            $model->membership_date = date('Y-m-d');
+
+            if ($model->save()) {
+                Yii::$app->session->setFlash('success', 'Profile completed successfully!');
+                return $this->redirect(['/member/dashboard']);
+            }
+        }
+
+        return $this->render('complete-profile', ['model' => $model]);
     }
 
     public function actionContact(): Response|string
@@ -164,5 +189,44 @@ class SiteController extends Controller
     public function actionOfferings(): string
     {
         return $this->render('offerings');
+    }
+
+    public function actionProfile(): string
+    {
+        $user = Yii::$app->user->identity;
+        return $this->render('profile', ['user' => $user]);
+    }
+
+    public function actionEditProfile(): Response|string
+    {
+        $user = Yii::$app->user->identity;
+        $model = Members::findOne(['user_id' => $user->id]);
+
+        if (!$model) {
+            return $this->redirect(['/site/complete-profile']);
+        }
+
+        if (Yii::$app->request->isPost) {
+            $model->load(Yii::$app->request->post());
+
+            // Check age
+            if (!empty($model->dob)) {
+                $dob = new \DateTime($model->dob);
+                $today = new \DateTime();
+                $age = $today->diff($dob)->y;
+
+                if ($age < 18) {
+                    Yii::$app->session->setFlash('error', 'You must be at least 18 years old.');
+                    return $this->render('edit-profile', ['model' => $model]);
+                }
+            }
+
+            if ($model->save()) {
+                Yii::$app->session->setFlash('success', 'Profile updated successfully!');
+                return $this->redirect(['/site/profile']);
+            }
+        }
+
+        return $this->render('edit-profile', ['model' => $model]);
     }
 }

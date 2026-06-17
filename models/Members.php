@@ -12,7 +12,6 @@ class Members extends ActiveRecord
         return 'members';
     }
 
-    
     public function getName()
     {
         return $this->first_name . ' ' . $this->last_name;
@@ -63,6 +62,7 @@ class Members extends ActiveRecord
             [['phone'], 'string', 'max' => 20],
             [['email'], 'email'],
             [['photo'], 'string', 'max' => 255],
+            [['user_id'], 'integer'],
         ];
     }
 
@@ -82,6 +82,7 @@ class Members extends ActiveRecord
             'status' => 'Status',
             'photo' => 'Photo',
             'created_at' => 'Created At',
+            'user_id' => 'User ID',
         ];
     }
 }

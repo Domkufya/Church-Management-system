@@ -16,9 +16,14 @@ class AttendanceSearch extends Attendance
         ];
     }
 
+    public function scenarios()
+    {
+        return Model::scenarios();
+    }
+
     public function search($params)
     {
-        $query = Attendance::find()->joinWith(['member', 'event']);
+        $query = Attendance::find();
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -30,14 +35,14 @@ class AttendanceSearch extends Attendance
             return $dataProvider;
         }
 
-        
         $query->andFilterWhere([
-            'attendance.id' => $this->id,
-            'attendance.event_id' => $this->event_id,
-            'attendance.member_id' => $this->member_id,
+            'id' => $this->id,
+            'event_id' => $this->event_id,
+            'member_id' => $this->member_id,
+            'recorded_at' => $this->recorded_at,
         ]);
 
-        $query->andFilterWhere(['like', 'attendance.status', $this->status]);
+        $query->andFilterWhere(['like', 'status', $this->status]);
 
         return $dataProvider;
     }
