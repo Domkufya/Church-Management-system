@@ -41,15 +41,6 @@ $this->title = 'Member Dashboard';
         </div>
 
         <div class="col-xs-6 col-md-3" style="margin-bottom:20px;">
-            <div style="background:#fff; border-radius:12px; padding:25px 20px; box-shadow:0 3px 12px rgba(0,0,0,0.08); border-top:4px solid #28a745; text-align:center;">
-                <div style="font-size:40px; margin-bottom:10px;">✅</div>
-                <h5 style="color:#28a745; font-weight:700; margin:0 0 8px 0;">Attendance</h5>
-                <p style="color:#888; font-size:13px; margin:0 0 15px 0;">Register your presence</p>
-                <?= Html::a('Check-in →', ['/attendance/create'], ['style' => 'background:#28a745; color:white; padding:8px 20px; border-radius:20px; text-decoration:none; font-size:13px; font-weight:600;']) ?>
-            </div>
-        </div>
-        
-        <div class="col-xs-6 col-md-3" style="margin-bottom:20px;">
             <div style="background:#fff; border-radius:12px; padding:25px 20px; box-shadow:0 3px 12px rgba(0,0,0,0.08); border-top:4px solid #e74c3c; text-align:center;">
                 <div style="font-size:40px; margin-bottom:10px;">👤</div>
                 <h5 style="color:#e74c3c; font-weight:700; margin:0 0 8px 0;">My Profile</h5>
