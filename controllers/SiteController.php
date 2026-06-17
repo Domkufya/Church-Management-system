@@ -35,17 +35,10 @@ class SiteController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::class,
-<<<<<<< HEAD
                 'only' => ['logout'],
                 'rules' => [
                     [
                         'actions' => ['logout'],
-=======
-                'only' => ['logout', 'profile'],
-                'rules' => [
-                    [
-                        'actions' => ['logout', 'profile'],
->>>>>>> 0d46a0fcdcb6d4281e54097fa87b0072ffa3986e
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -116,33 +109,54 @@ class SiteController extends Controller
             $post = Yii::$app->request->post();
             $model->username = $post['User']['username'];
             $model->email = $post['User']['email'];
-<<<<<<< HEAD
             $model->role = 'member';
-=======
-            $model->role = $post['User']['role'] ?? 'member';
->>>>>>> 0d46a0fcdcb6d4281e54097fa87b0072ffa3986e
             $model->status = 1;
             $model->setPassword($post['User']['password_hash']);
             $model->auth_key = Yii::$app->security->generateRandomString();
 
             if ($model->save()) {
-                $member = new Members();
-                $member->user_id = $model->id;
-                $member->first_name = $model->username;
-                $member->last_name = '';
-                $member->gender = 'Male';
-                $member->phone = '';
-                $member->email = $model->email;
-                $member->address = '';
-                $member->marital_status = 'Single';
-                $member->save(false);
-
-                Yii::$app->session->setFlash('success', 'Account created successfully! Please login.');
-                return $this->redirect(['site/login']);
+                Yii::$app->user->login($model, 0);
+                return $this->redirect(['/site/complete-profile']);
             }
         }
 
         return $this->render('register', ['model' => $model]);
+    }
+
+    public function actionCompleteProfile(): Response|string
+    {
+        if (Yii::$app->user->isGuest) {
+            return $this->redirect(['site/login']);
+        }
+
+        $model = new Members();
+
+        if (Yii::$app->request->isPost) {
+            $model->load(Yii::$app->request->post());
+
+            // Check age — lazima awe na miaka 18+
+            if (!empty($model->dob)) {
+                $dob = new \DateTime($model->dob);
+                $today = new \DateTime();
+                $age = $today->diff($dob)->y;
+
+                if ($age < 18) {
+                    Yii::$app->session->setFlash('error', 'You must be at least 18 years old to register.');
+                    return $this->render('complete-profile', ['model' => $model]);
+                }
+            }
+
+            $model->user_id = Yii::$app->user->id;
+            $model->status = 'Active';
+            $model->membership_date = date('Y-m-d');
+
+            if ($model->save()) {
+                Yii::$app->session->setFlash('success', 'Profile completed successfully!');
+                return $this->redirect(['/member/dashboard']);
+            }
+        }
+
+        return $this->render('complete-profile', ['model' => $model]);
     }
 
     public function actionContact(): Response|string
@@ -176,106 +190,43 @@ class SiteController extends Controller
     {
         return $this->render('offerings');
     }
-<<<<<<< HEAD
-    public function actionProfile(): string
-{
-    $user = Yii::$app->user->identity;
-    return $this->render('profile', ['user' => $user]);
-}
-=======
 
-    public function actionProfile()
+    public function actionProfile(): string
     {
         $user = Yii::$app->user->identity;
-        if (!$user) {
-            return $this->goHome();
-        }
+        return $this->render('profile', ['user' => $user]);
+    }
 
-        $member = Members::findOne(['user_id' => $user->id]);
-        if (!$member) {
-            $member = new Members();
-            $member->user_id = $user->id;
-            $member->first_name = $user->username;
-            $member->last_name = '';
-            $member->gender = 'Male';
-            $member->email = $user->email;
-            $member->save(false);
+    public function actionEditProfile(): Response|string
+    {
+        $user = Yii::$app->user->identity;
+        $model = Members::findOne(['user_id' => $user->id]);
+
+        if (!$model) {
+            return $this->redirect(['/site/complete-profile']);
         }
 
         if (Yii::$app->request->isPost) {
-            $post = Yii::$app->request->post();
-            
-            if (isset($post['User'])) {
-                $user->username = $post['User']['username'] ?? $user->username;
-                $user->email = $post['User']['email'] ?? $user->email;
-                if (!empty($post['User']['password_new'])) {
-                    $user->setPassword($post['User']['password_new']);
+            $model->load(Yii::$app->request->post());
+
+            // Check age
+            if (!empty($model->dob)) {
+                $dob = new \DateTime($model->dob);
+                $today = new \DateTime();
+                $age = $today->diff($dob)->y;
+
+                if ($age < 18) {
+                    Yii::$app->session->setFlash('error', 'You must be at least 18 years old.');
+                    return $this->render('edit-profile', ['model' => $model]);
                 }
-                $user->save();
             }
 
-            // Temporarily store the current photo attribute value
-            $currentPhoto = $member->photo;
-
-            if ($member->load($this->request->post())) {
-                $capturedPhoto = Yii::$app->request->post('captured_photo');
-                if ($capturedPhoto && strpos($capturedPhoto, 'data:image') === 0) {
-                    $data = explode(',', $capturedPhoto);
-                    if (count($data) === 2) {
-                        $decodedImage = base64_decode($data[1]);
-                        $fileName = 'member_cam_' . time() . '.jpg';
-                        $uploadPath = Yii::getAlias('@webroot') . '/uploads/' . $fileName;
-                        
-                        if (!is_dir(dirname($uploadPath))) {
-                            mkdir(dirname($uploadPath), 0777, true);
-                        }
-                        
-                        if (file_put_contents($uploadPath, $decodedImage)) {
-                            if ($currentPhoto) {
-                                $oldPath = Yii::getAlias('@webroot') . '/uploads/' . $currentPhoto;
-                                if (file_exists($oldPath)) {
-                                    @unlink($oldPath);
-                                }
-                            }
-                            $member->photo = $fileName;
-                        }
-                    }
-                } else {
-                    $file = \yii\web\UploadedFile::getInstance($member, 'photo');
-                    if ($file) {
-                        $fileName = 'member_' . time() . '.' . $file->extension;
-                        $uploadPath = Yii::getAlias('@webroot') . '/uploads/' . $fileName;
-                        
-                        if (!is_dir(dirname($uploadPath))) {
-                            mkdir(dirname($uploadPath), 0777, true);
-                        }
-                        
-                        if ($file->saveAs($uploadPath)) {
-                            if ($currentPhoto) {
-                                $oldPath = Yii::getAlias('@webroot') . '/uploads/' . $currentPhoto;
-                                if (file_exists($oldPath)) {
-                                    @unlink($oldPath);
-                                }
-                            }
-                            $member->photo = $fileName;
-                        }
-                    } else {
-                        // Restore photo attribute value if no new photo uploaded/captured
-                        $member->photo = $currentPhoto;
-                    }
-                }
-
-                if ($member->save(false)) {
-                    Yii::$app->session->setFlash('success', 'Profile updated successfully!');
-                    return $this->refresh();
-                }
+            if ($model->save()) {
+                Yii::$app->session->setFlash('success', 'Profile updated successfully!');
+                return $this->redirect(['/site/profile']);
             }
         }
 
-        return $this->render('profile', [
-            'user' => $user,
-            'member' => $member,
-        ]);
+        return $this->render('edit-profile', ['model' => $model]);
     }
->>>>>>> 0d46a0fcdcb6d4281e54097fa87b0072ffa3986e
 }

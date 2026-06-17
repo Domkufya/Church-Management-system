@@ -8,10 +8,7 @@ use yii\filters\AccessControl;
 use app\models\Events;
 use app\models\PrayerRequests;
 use app\models\Members;
-<<<<<<< HEAD
 use app\models\MemberDepartments;
-=======
->>>>>>> 0d46a0fcdcb6d4281e54097fa87b0072ffa3986e
 
 class MemberController extends Controller
 {
@@ -38,49 +35,31 @@ class MemberController extends Controller
             return $this->redirect(['/dashboard/index']);
         }
 
-<<<<<<< HEAD
-=======
+        // Zuia member asiyejaza profile
         $member = Members::findOne(['user_id' => $user->id]);
-
-        $prayers = [];
-        if ($member) {
-            $prayers = PrayerRequests::find()
-                ->where(['member_id' => $member->id])
-                ->orderBy(['id' => SORT_DESC])
-                ->limit(5)
-                ->all();
+        if (!$member) {
+            return $this->redirect(['/site/complete-profile']);
         }
 
->>>>>>> 0d46a0fcdcb6d4281e54097fa87b0072ffa3986e
         $events = Events::find()
             ->orderBy(['id' => SORT_DESC])
             ->limit(5)
             ->all();
 
-<<<<<<< HEAD
         $prayers = PrayerRequests::find()
             ->orderBy(['id' => SORT_DESC])
             ->limit(5)
             ->all();
 
-        $member = Members::findOne(['user_id' => $user->id]);
-        $dept_notification = null;
-        if ($member) {
-            $dept_notification = MemberDepartments::findOne([
-                'member_id' => $member->id,
-            ]);
-        }
+        $dept_notification = MemberDepartments::findOne([
+            'member_id' => $member->id,
+        ]);
 
-=======
->>>>>>> 0d46a0fcdcb6d4281e54097fa87b0072ffa3986e
         return $this->render('dashboard', [
             'events' => $events,
             'prayers' => $prayers,
             'user' => $user,
-<<<<<<< HEAD
             'dept_notification' => $dept_notification,
-=======
->>>>>>> 0d46a0fcdcb6d4281e54097fa87b0072ffa3986e
         ]);
     }
 
@@ -109,8 +88,8 @@ class MemberController extends Controller
         $member = Members::findOne(['user_id' => $user->id]);
 
         if (!$member) {
-            Yii::$app->session->setFlash('error', 'Your account is not linked to a member record. Please contact admin.');
-            return $this->redirect(['member/dashboard']);
+            Yii::$app->session->setFlash('error', 'Please complete your profile first!');
+            return $this->redirect(['/site/complete-profile']);
         }
 
         $model = new PrayerRequests();
