@@ -1,5 +1,5 @@
 <?php
-<<<<<<< HEAD
+
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use app\models\Events;
@@ -27,15 +27,9 @@ $form = ActiveForm::begin(); ?>
     </div>
 
 <?php ActiveForm::end(); ?>
-=======
 
-use yii\helpers\Html;
-use yii\widgets\ActiveForm;
 
-/** @var yii\web\View $this */
-/** @var app\models\Attendance $model */
-/** @var yii\widgets\ActiveForm $form */
-?>
+
 
 <div class="attendance-form">
 
@@ -56,4 +50,4 @@ use yii\widgets\ActiveForm;
     <?php ActiveForm::end(); ?>
 
 </div>
->>>>>>> 0d46a0fcdcb6d4281e54097fa87b0072ffa3986e
+

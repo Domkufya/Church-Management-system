@@ -9,6 +9,21 @@ $this->title = 'Member Dashboard';
         <p style="margin:8px 0 0 0; opacity:0.9; font-size:15px;">Welcome, <?= Html::encode($user->username) ?>! — <?= date('l, d F Y') ?></p>
         <p style="margin:5px 0 0 0; opacity:0.8; font-size:13px;">🙏 "For where two or three gather in my name, there am I with them." — Matthew 18:20</p>
     </div>
+    <?php if ($dept_notification): ?>
+    <?php if ($dept_notification->status === 'Approved'): ?>
+    <div style="background:#d4edda; border:1px solid #1cc88a; border-radius:10px; padding:15px 20px; margin-bottom:20px; display:flex; justify-content:space-between; align-items:center;">
+        <span style="color:#155724; font-weight:600;">✅ Your request to join <strong><?= $dept_notification->department->name ?></strong> has been <strong>Approved!</strong> Welcome to the department!</span>
+    </div>
+    <?php elseif ($dept_notification->status === 'Rejected'): ?>
+    <div style="background:#f8d7da; border:1px solid #e74a3b; border-radius:10px; padding:15px 20px; margin-bottom:20px;">
+        <span style="color:#721c24; font-weight:600;">❌ Your request to join <strong><?= $dept_notification->department->name ?></strong> has been <strong>Rejected.</strong> Please contact admin for more information.</span>
+    </div>
+    <?php elseif ($dept_notification->status === 'Pending'): ?>
+    <div style="background:#fff3cd; border:1px solid #ffc107; border-radius:10px; padding:15px 20px; margin-bottom:20px;">
+        <span style="color:#856404; font-weight:600;">⏳ Your request to join <strong><?= $dept_notification->department->name ?></strong> is <strong>Pending</strong> admin approval.</span>
+    </div>
+    <?php endif; ?>
+<?php endif; ?>
 
     <h5 style="color:#555; margin-bottom:15px; font-weight:600;">📌 Quick Access</h5>
     <div class="row">
@@ -36,7 +51,7 @@ $this->title = 'Member Dashboard';
                 <div style="font-size:40px; margin-bottom:10px;">💰</div>
                 <h5 style="color:#f6c23e; font-weight:700; margin:0 0 8px 0;">Offerings</h5>
                 <p style="color:#888; font-size:13px; margin:0 0 15px 0;">View your offering records</p>
-                <?= Html::a('View →', ['/member/offerings'], ['style' => 'background:#f6c23e; color:white; padding:8px 20px; border-radius:20px; text-decoration:none; font-size:13px; font-weight:600;']) ?>
+                <?= Html::a('View →', ['/site/offerings'], ['style' => 'background:#f6c23e; color:white; padding:8px 20px; border-radius:20px; text-decoration:none; font-size:13px; font-weight:600;']) ?>
             </div>
         </div>
 
@@ -45,7 +60,7 @@ $this->title = 'Member Dashboard';
                 <div style="font-size:40px; margin-bottom:10px;">👤</div>
                 <h5 style="color:#e74c3c; font-weight:700; margin:0 0 8px 0;">My Profile</h5>
                 <p style="color:#888; font-size:13px; margin:0 0 15px 0;">View & update your profile</p>
-                <?= Html::a('View →', ['/member/profile'], ['style' => 'background:#e74c3c; color:white; padding:8px 20px; border-radius:20px; text-decoration:none; font-size:13px; font-weight:600;']) ?>
+                <?= Html::a('View →', ['/site/profile'], ['style' => 'background:#e74c3c; color:white; padding:8px 20px; border-radius:20px; text-decoration:none; font-size:13px; font-weight:600;']) ?>
             </div>
         </div>
 
