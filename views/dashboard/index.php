@@ -11,7 +11,7 @@ $this->title = 'Dashboard';
         <h2 style="margin:0;">⛪ Faith Christian Church</h2>
         <p style="margin:5px 0 0 0; opacity:0.85;">Welcome back, <?= Html::encode(Yii::$app->user->identity->username) ?>! — <?= date('l, d F Y') ?></p>
     </div>
-<<<<<<< HEAD
+
     <?php if ($pending_requests > 0): ?>
 <div style="background:#fff3cd; border:1px solid #ffc107; border-radius:10px; padding:15px 20px; margin-bottom:20px; display:flex; justify-content:space-between; align-items:center;">
     <span style="color:#856404; font-weight:600;">⚠️ You have <strong><?= $pending_requests ?></strong> pending department join request(s)!</span>
@@ -20,8 +20,8 @@ $this->title = 'Dashboard';
     ]) ?>
 </div>
 <?php endif; ?>
-=======
->>>>>>> 0d46a0fcdcb6d4281e54097fa87b0072ffa3986e
+
+
 
     <!-- Stats Cards -->
     <div class="row">

@@ -45,8 +45,8 @@ $this->title = 'Register';
                     ]) ?>
                 </div>
 
-<<<<<<< HEAD
-=======
+
+
                 <div style="margin-bottom:18px;">
                     <label style="font-size:13px; font-weight:600; color:#555; display:block; margin-bottom:6px;">🎭 Role / Position</label>
                     <?= $form->field($model, 'role', ['template' => '{input}{error}'])->dropDownList([
@@ -60,7 +60,7 @@ $this->title = 'Register';
                     ]) ?>
                 </div>
 
->>>>>>> 0d46a0fcdcb6d4281e54097fa87b0072ffa3986e
+
                 <div style="margin-bottom:25px;">
                     <label style="font-size:13px; font-weight:600; color:#555; display:block; margin-bottom:6px;">🔒 Password</label>
                     <?= $form->field($model, 'password_hash', ['template' => '{input}{error}'])->passwordInput([
