@@ -1,90 +1,124 @@
 <?php
+/**
+ * Create Account view — Step 1 of 2
+ * Place at: views/site/register.php
+ *
+ * @var yii\web\View $this
+ * @var app\models\User $model
+ */
+declare(strict_types=1);
+
 use yii\helpers\Html;
-use yii\widgets\ActiveForm;
-$this->title = 'Register';
+use yii\helpers\Url;
+use yii\bootstrap5\ActiveForm;
+
+$this->title  = 'Create Account';
 ?>
 
-<div style="min-height:100vh; background:linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); margin-top:-20px; padding-top:80px; padding-bottom:40px;">
+<div class="auth-wrap">
+<div style="width:100%;max-width:480px;position:relative;z-index:1;">
 
-    <div style="max-width:480px; margin:0 auto; padding:0 20px;">
+    <a href="<?= Url::home() ?>" class="back-home">← Back to Home</a>
 
-        <!-- Logo & Title -->
-        <div style="text-align:center; margin-bottom:30px; color:white;">
-            <div style="font-size:55px;">⛪</div>
-            <h2 style="font-weight:800; margin:10px 0 5px 0;">Faith Christian Church</h2>
-            <p style="opacity:0.7; margin:0; font-size:14px;">Create your account to get started</p>
-        </div>
+    <div class="auth-card auth-card-wide">
 
-        <!-- Form Card -->
-        <div style="background:white; border-radius:20px; padding:35px 30px; box-shadow:0 20px 60px rgba(0,0,0,0.3);">
-
-            <h4 style="text-align:center; color:#1a1a2e; margin:0 0 25px 0; font-weight:700;">📝 Register</h4>
-
-            <?php if (Yii::$app->session->hasFlash('success')): ?>
-                <div style="background:#d4edda; color:#155724; padding:12px; border-radius:8px; margin-bottom:15px; font-size:14px;">
-                    ✅ <?= Yii::$app->session->getFlash('success') ?>
-                </div>
-            <?php endif; ?>
-
-            <?php $form = ActiveForm::begin(['options' => ['style' => 'margin:0;']]); ?>
-
-                <div style="margin-bottom:18px;">
-                    <label style="font-size:13px; font-weight:600; color:#555; display:block; margin-bottom:6px;">👤 Username</label>
-                    <?= $form->field($model, 'username', ['template' => '{input}{error}'])->textInput([
-                        'placeholder' => 'Choose a username',
-                        'style' => 'width:100%; padding:12px 15px; border:2px solid #e0e0e0; border-radius:10px; font-size:14px; outline:none; box-sizing:border-box;',
-                        'autofocus' => true
-                    ]) ?>
-                </div>
-
-                <div style="margin-bottom:18px;">
-                    <label style="font-size:13px; font-weight:600; color:#555; display:block; margin-bottom:6px;">📧 Email</label>
-                    <?= $form->field($model, 'email', ['template' => '{input}{error}'])->input('email', [
-                        'placeholder' => 'Your email address',
-                        'style' => 'width:100%; padding:12px 15px; border:2px solid #e0e0e0; border-radius:10px; font-size:14px; outline:none; box-sizing:border-box;',
-                    ]) ?>
-                </div>
-
-
-
-                <div style="margin-bottom:18px;">
-                    <label style="font-size:13px; font-weight:600; color:#555; display:block; margin-bottom:6px;">🎭 Role / Position</label>
-                    <?= $form->field($model, 'role', ['template' => '{input}{error}'])->dropDownList([
-                        'member' => 'Member',
-                        'pastor' => 'Pastor',
-                        'secretary' => 'Secretary',
-                        'treasurer' => 'Treasurer',
-                        'admin' => 'Administrator',
-                    ], [
-                        'style' => 'width:100%; padding:12px 15px; border:2px solid #e0e0e0; border-radius:10px; font-size:14px; outline:none; box-sizing:border-box; background:white;',
-                    ]) ?>
-                </div>
-
-
-                <div style="margin-bottom:25px;">
-                    <label style="font-size:13px; font-weight:600; color:#555; display:block; margin-bottom:6px;">🔒 Password</label>
-                    <?= $form->field($model, 'password_hash', ['template' => '{input}{error}'])->passwordInput([
-                        'placeholder' => 'Create a strong password',
-                        'style' => 'width:100%; padding:12px 15px; border:2px solid #e0e0e0; border-radius:10px; font-size:14px; outline:none; box-sizing:border-box;',
-                    ])->label(false) ?>
-                </div>
-
-                <div style="margin-bottom:20px;">
-                    <?= Html::submitButton('Create Account →', [
-                        'style' => 'width:100%; background:linear-gradient(135deg, #1cc88a 0%, #17a673 100%); color:white; padding:14px; border:none; border-radius:10px; font-size:16px; font-weight:700; cursor:pointer; box-shadow:0 4px 15px rgba(28,200,138,0.4);'
-                    ]) ?>
-                </div>
-
-            <?php ActiveForm::end(); ?>
-
-            <div style="text-align:center; color:#888; font-size:14px;">
-                Already have an account? <?= Html::a('Login here', ['/site/login'], ['style' => 'color:#4e73df; font-weight:600; text-decoration:none;']) ?>
+        <!-- Flash messages -->
+        <?php foreach (Yii::$app->session->getAllFlashes() as $type => $msg): ?>
+            <div class="auth-alert auth-alert-<?= $type === 'error' ? 'danger' : 'success' ?>">
+                <?= Html::encode(is_array($msg) ? implode(' ', $msg) : $msg) ?>
             </div>
+        <?php endforeach; ?>
+
+        <div class="auth-logo">
+            <div class="cross-badge">✝</div>
+            <h1>Create Account</h1>
+            <p>Step 1 of 2 — Set up your login credentials</p>
         </div>
 
-        <!-- Footer note -->
-        <p style="text-align:center; color:rgba(255,255,255,0.5); font-size:12px; margin-top:20px;">
-            🙏 God bless you as you join our community
-        </p>
-    </div>
+        <!-- Progress steps -->
+        <div class="steps-bar">
+            <div class="step active"><div class="step-num">1</div><span>Account</span></div>
+            <div class="step-line"></div>
+            <div class="step"><div class="step-num">2</div><span>Profile</span></div>
+        </div>
+
+        <?php $form = ActiveForm::begin([
+            'id'          => 'register-form',
+            'fieldConfig' => [
+                'template'     => "<div class=\"field-wrapper\">{label}\n{input}\n{error}</div>",
+                'labelOptions' => ['class' => 'form-label'],
+                'inputOptions' => ['class' => 'form-control'],
+                'errorOptions' => ['class' => 'help-block-error'],
+            ],
+        ]); ?>
+
+            <?= $form->field($model, 'username')->textInput([
+                'autofocus'   => true,
+                'placeholder' => 'Choose a username',
+            ])->label('Username') ?>
+
+            <?= $form->field($model, 'email')->input('email', [
+                'placeholder' => 'your@email.com',
+            ])->label('Email Address') ?>
+
+            <?= $form->field($model, 'password_hash')->passwordInput([
+                'id'          => 'pw-input',
+                'placeholder' => 'Min. 8 characters',
+            ])->label('Password') ?>
+
+            <!-- Password strength indicator -->
+            <div style="margin:-0.5rem 0 1rem;">
+                <div id="pw-strength-bar" class="pw-strength-bar"></div>
+                <span id="pw-strength-label" class="pw-strength-label"></span>
+            </div>
+
+            <div class="auth-info-box auth-info-gold">
+                🔐 After creating your account you will be taken to complete your church member profile.
+            </div>
+
+            <button type="submit" class="auth-btn auth-btn-gold">
+                ✨ Create Account &amp; Continue →
+            </button>
+
+        <?php ActiveForm::end(); ?>
+
+        <div class="auth-divider">Already have an account?</div>
+
+        <a href="<?= Url::to(['/site/login']) ?>" class="auth-btn-outline">
+            🔑 Sign In
+        </a>
+
+        <div class="auth-footer-links">
+            <a href="<?= Url::to(['/site/forgot-password']) ?>">Forgot password?</a>
+            <a href="<?= Url::to(['/site/contact']) ?>">Contact Church</a>
+        </div>
+
+    </div><!-- /.auth-card -->
 </div>
+</div>
+
+<script>
+(function() {
+    const input = document.getElementById('pw-input');
+    const bar   = document.getElementById('pw-strength-bar');
+    const lbl   = document.getElementById('pw-strength-label');
+    if (!input) return;
+    input.addEventListener('input', function() {
+        const v = this.value;
+        let score = 0;
+        if (v.length >= 8)           score++;
+        if (/[A-Z]/.test(v))         score++;
+        if (/[0-9]/.test(v))         score++;
+        if (/[^A-Za-z0-9]/.test(v))  score++;
+        const colors = ['#ef4444','#f97316','#f59e0b','#10b981'];
+        const labels = ['Weak','Fair','Good','Strong'];
+        const widths = ['25%','50%','75%','100%'];
+        if (!v.length) { bar.style.width='0'; lbl.textContent=''; return; }
+        const i = Math.max(0, score - 1);
+        bar.style.width      = widths[i];
+        bar.style.background = colors[i];
+        lbl.textContent      = labels[i];
+        lbl.style.color      = colors[i];
+    });
+})();
+</script>

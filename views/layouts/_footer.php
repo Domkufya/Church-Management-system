@@ -6,36 +6,30 @@ declare(strict_types=1);
 
 use yii\helpers\Html;
 
+// Guests see no footer — landing page is self-contained
+if (Yii::$app->user->isGuest) {
+    return;
+}
 ?>
-<footer id="footer" class="mt-auto py-3 bg-body-tertiary">
-    <div class="container">
-        <div class="row text-body-secondary">
-            <div class="col-md-6 text-center text-md-start">&copy; <?= Html::encode(Yii::$app->name) ?> <?= date('Y') ?></div>
-            <div class="col-md-6 text-center text-md-end">
-                <a href="https://www.yiiframework.com/" rel="external" class="text-body-secondary text-decoration-none">
-                    <?= Yii::t(
-                        'yii',
-                        'Powered by {yii}',
-                        ['yii' => ''],
-                    ) ?>
-                    <?= Html::img(
-                        '@web/images/yii3_full_for_light.svg',
-                        [
-                            'alt' => 'Yii Framework',
-                            'class' => 'align-text-bottom footer-logo-light',
-                            'height' => '28',
-                        ],
-                    ) ?>
-                    <?= Html::img(
-                        '@web/images/yii3_full_for_dark.svg',
-                        [
-                            'alt' => 'Yii Framework',
-                            'class' => 'align-text-bottom footer-logo-dark',
-                            'height' => '28',
-                        ],
-                    ) ?>
-                </a>
-            </div>
-        </div>
+<footer class="app-footer">
+    <div class="app-footer-left">
+        <strong>✝ <?= Html::encode(Yii::$app->name) ?></strong>
+        &nbsp;·&nbsp; &copy; <?= date('Y') ?> All rights reserved.
+    </div>
+    <div class="app-footer-verse">
+        "Let everything be done for the glory of God." — <span style="color:var(--c-gold);">1 Cor 10:31</span>
+    </div>
+    <div class="app-footer-right">
+        <?= Yii::t('yii', 'Powered by {yii}', ['yii' => '']) ?>
+        <?= Html::img('@web/images/yii3_full_for_light.svg', [
+            'alt'    => 'Yii Framework',
+            'class'  => 'footer-logo-light',
+            'height' => '20',
+        ]) ?>
+        <?= Html::img('@web/images/yii3_full_for_dark.svg', [
+            'alt'    => 'Yii Framework',
+            'class'  => 'footer-logo-dark',
+            'height' => '20',
+        ]) ?>
     </div>
 </footer>

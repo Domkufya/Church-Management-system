@@ -1,171 +1,207 @@
 <?php
+/**
+ * User model
+ * Place at: models/User.php
+ *
+ * Synced with users table columns:
+ *   id, username, password_hash, auth_key, email,
+ *   role (ENUM), role_id (FK), status, created_at
+ */
+declare(strict_types=1);
 
 namespace app\models;
 
 use Yii;
+use yii\base\NotSupportedException;
+use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveRecord;
+use yii\web\IdentityInterface;
 
 /**
- * This is the model class for table "users".
- *
- * @property int $id
+ * @property int    $id
  * @property string $username
  * @property string $password_hash
+ * @property string $auth_key
  * @property string $email
- * @property string|null $role
- * @property int|null $status
- * @property string|null $created_at
- *
- * @property Expenses[] $expenses
- * @property Offerings[] $offerings
+ * @property string $role
+ * @property int    $role_id
+ * @property int    $status
+ * @property int    $created_at
  */
-class users extends \yii\db\ActiveRecord
+class User extends ActiveRecord implements IdentityInterface
 {
+    // ── All system roles — keep in sync with roles table and users.role ENUM ──
+    public const ROLE_SUPERADMIN        = 'superadmin';
+    public const ROLE_ADMIN             = 'admin';
+    public const ROLE_PASTOR            = 'pastor';
+    public const ROLE_SECRETARY         = 'secretary';
+    public const ROLE_TREASURER         = 'treasurer';
+    public const ROLE_DEPARTMENT_LEADER = 'department_leader';
+    public const ROLE_MEMBER            = 'member';
 
-    /**
-     * ENUM field values
-     */
-    const ROLE_ADMIN = 'admin';
-    const ROLE_PASTOR = 'pastor';
-    const ROLE_SECRETARY = 'secretary';
-    const ROLE_TREASURER = 'treasurer';
+    // ── Roles that can access the admin/staff dashboard ──
+    public const STAFF_ROLES = [
+        self::ROLE_SUPERADMIN,
+        self::ROLE_ADMIN,
+        self::ROLE_PASTOR,
+        self::ROLE_SECRETARY,
+        self::ROLE_TREASURER,
+        self::ROLE_DEPARTMENT_LEADER,
+    ];
 
-    /**
-     * {@inheritdoc}
-     */
-    public static function tableName()
+    public const STATUS_INACTIVE = 0;
+    public const STATUS_ACTIVE   = 1;
+
+    public static function tableName(): string
     {
         return 'users';
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function rules()
+    public function rules(): array
     {
         return [
-            [['role'], 'default', 'value' => 'secretary'],
-            [['status'], 'default', 'value' => 1],
-            [['username', 'password_hash', 'email'], 'required'],
-            [['role'], 'string'],
-            [['status'], 'integer'],
-            [['created_at'], 'safe'],
-            [['username'], 'string', 'max' => 50],
-            [['password_hash'], 'string', 'max' => 255],
-            [['email'], 'string', 'max' => 100],
-            ['role', 'in', 'range' => array_keys(self::optsRole())],
-            [['username'], 'unique'],
-            [['email'], 'unique'],
+            ['username', 'required'],
+            ['username', 'unique'],
+            ['username', 'string', 'max' => 50],
+
+            ['email', 'required'],
+            ['email', 'email'],
+            ['email', 'unique'],
+            ['email', 'string', 'max' => 100],
+
+            ['password_hash', 'required'],
+            ['password_hash', 'string', 'min' => 6],
+
+            ['role', 'in', 'range' => [
+                self::ROLE_SUPERADMIN,
+                self::ROLE_ADMIN,
+                self::ROLE_PASTOR,
+                self::ROLE_SECRETARY,
+                self::ROLE_TREASURER,
+                self::ROLE_DEPARTMENT_LEADER,
+                self::ROLE_MEMBER,
+            ]],
+
+            ['role_id', 'integer'],
+            ['status', 'integer'],
+            ['status', 'default', 'value' => self::STATUS_ACTIVE],
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function attributeLabels()
+    public function attributeLabels(): array
     {
         return [
-            'id' => 'ID',
-            'username' => 'Username',
-            'password_hash' => 'Password Hash',
-            'email' => 'Email',
-            'role' => 'Role',
-            'status' => 'Status',
-            'created_at' => 'Created At',
+            'id'            => 'ID',
+            'username'      => 'Username',
+            'email'         => 'Email',
+            'password_hash' => 'Password',
+            'role'          => 'Role',
+            'status'        => 'Status',
+            'created_at'    => 'Created At',
         ];
     }
 
-    /**
-     * Gets query for [[Expenses]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getExpenses()
+    // ── IdentityInterface ──────────────────────────────────────────
+
+    public static function findIdentity($id): ?static
     {
-        return $this->hasMany(Expenses::class, ['approved_by' => 'id']);
+        return static::findOne(['id' => $id, 'status' => self::STATUS_ACTIVE]);
     }
 
-    /**
-     * Gets query for [[Offerings]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getOfferings()
+    public static function findIdentityByAccessToken($token, $type = null): ?static
     {
-        return $this->hasMany(Offerings::class, ['received_by' => 'id']);
+        throw new NotSupportedException('"findIdentityByAccessToken" is not implemented.');
     }
 
-
-    /**
-     * column role ENUM value labels
-     * @return string[]
-     */
-    public static function optsRole()
+    public static function findByUsername(string $username): ?static
     {
-        return [
-            self::ROLE_ADMIN => 'admin',
-            self::ROLE_PASTOR => 'pastor',
-            self::ROLE_SECRETARY => 'secretary',
-            self::ROLE_TREASURER => 'treasurer',
-        ];
+        return static::findOne([
+            'username' => $username,
+            'status'   => self::STATUS_ACTIVE,
+        ]);
     }
 
-    /**
-     * @return string
-     */
-    public function displayRole()
+    public static function findByEmail(string $email): ?static
     {
-        return self::optsRole()[$this->role];
+        return static::findOne([
+            'email'  => $email,
+            'status' => self::STATUS_ACTIVE,
+        ]);
     }
 
-    /**
-     * @return bool
-     */
-    public function isRoleAdmin()
+    public function getId(): int
+    {
+        return $this->getPrimaryKey();
+    }
+
+    public function getAuthKey(): ?string
+    {
+        return $this->auth_key;
+    }
+
+    public function validateAuthKey($authKey): bool
+    {
+        return $this->getAuthKey() === $authKey;
+    }
+
+    // ── Password ───────────────────────────────────────────────────
+
+    public function validatePassword(string $password): bool
+    {
+        return Yii::$app->security->validatePassword($password, $this->password_hash);
+    }
+
+    public function setPassword(string $password): void
+    {
+        $this->password_hash = Yii::$app->security->generatePasswordHash($password);
+    }
+
+    public function generateAuthKey(): void
+    {
+        $this->auth_key = Yii::$app->security->generateRandomString();
+    }
+
+    // ── Role helpers ───────────────────────────────────────────────
+
+    public function isSuperAdmin(): bool
+    {
+        return $this->role === self::ROLE_SUPERADMIN;
+    }
+
+    public function isAdmin(): bool
     {
         return $this->role === self::ROLE_ADMIN;
     }
 
-    public function setRoleToAdmin()
+    public function isMember(): bool
     {
-        $this->role = self::ROLE_ADMIN;
+        return $this->role === self::ROLE_MEMBER;
     }
 
-    /**
-     * @return bool
-     */
-    public function isRolePastor()
+    public function isStaff(): bool
     {
-        return $this->role === self::ROLE_PASTOR;
+        return in_array($this->role, self::STAFF_ROLES, true);
     }
 
-    public function setRoleToPastor()
+    /** Human-readable role label */
+    public function getRoleLabel(): string
     {
-        $this->role = self::ROLE_PASTOR;
+        return match($this->role) {
+            self::ROLE_SUPERADMIN        => 'Super Administrator',
+            self::ROLE_ADMIN             => 'Administrator',
+            self::ROLE_PASTOR            => 'Pastor',
+            self::ROLE_SECRETARY         => 'Secretary',
+            self::ROLE_TREASURER         => 'Treasurer',
+            self::ROLE_DEPARTMENT_LEADER => 'Department Leader',
+            self::ROLE_MEMBER            => 'Church Member',
+            default                      => ucfirst($this->role),
+        };
     }
 
-    /**
-     * @return bool
-     */
-    public function isRoleSecretary()
-    {
-        return $this->role === self::ROLE_SECRETARY;
-    }
+    // ── Relation ───────────────────────────────────────────────────
 
-    public function setRoleToSecretary()
+    public function getRoleModel(): \yii\db\ActiveQuery
     {
-        $this->role = self::ROLE_SECRETARY;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isRoleTreasurer()
-    {
-        return $this->role === self::ROLE_TREASURER;
-    }
-
-    public function setRoleToTreasurer()
-    {
-        $this->role = self::ROLE_TREASURER;
+        return $this->hasOne(Roles::class, ['id' => 'role_id']);
     }
 }
