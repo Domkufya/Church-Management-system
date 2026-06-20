@@ -2,7 +2,7 @@
 
 namespace app\controllers;
 use Yii;
-use app\models\Users;
+use app\models\User;
 use app\models\UsersSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -53,7 +53,7 @@ class UsersController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new UsersSearch();
+        $searchModel = new UserSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
         return $this->render('index', [
@@ -82,7 +82,7 @@ class UsersController extends Controller
      */
     public function actionCreate()
     {
-        $model = new Users();
+        $model = new User();
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
@@ -140,7 +140,7 @@ class UsersController extends Controller
      */
     protected function findModel($id)
     {
-        if (($model = Users::findOne(['id' => $id])) !== null) {
+        if (($model = User::findOne(['id' => $id])) !== null) {
             return $model;
         }
 

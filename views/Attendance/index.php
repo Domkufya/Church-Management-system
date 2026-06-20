@@ -55,8 +55,11 @@ $this->title = 'Attendance Management';
             'recorded_at:datetime',
 
             [
-                'class' => 'yii\grid\ActionColumn',
-            ],
+    'class' => 'yii\grid\ActionColumn',
+    'urlCreator' => function ($action, $model, $key, $index) {
+        return \yii\helpers\Url::toRoute([$action, 'id' => $model->id]);
+    }
+],
         ],
     ]); ?>
 

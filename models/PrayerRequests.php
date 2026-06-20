@@ -18,6 +18,8 @@ class PrayerRequests extends ActiveRecord
             [['member_id', 'is_anonymous'], 'integer'],
             [['status'], 'string', 'max' => 255],
             [['created_at'], 'safe'],
+            [['created_by_role'], 'string', 'max' => 20],
+            [['created_by_role'], 'default', 'value' => 'member'],
         ];
     }
 
@@ -30,6 +32,7 @@ class PrayerRequests extends ActiveRecord
             'is_anonymous' => 'Anonymous',
             'status' => 'Status',
             'created_at' => 'Created At',
+            'created_by_role' => 'Created By Role',
         ];
     }
 

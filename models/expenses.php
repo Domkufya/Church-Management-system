@@ -56,7 +56,7 @@ class expenses extends \yii\db\ActiveRecord
             [['title'], 'string', 'max' => 200],
             [['receipt_photo'], 'string', 'max' => 255],
             ['category', 'in', 'range' => array_keys(self::optsCategory())],
-            [['approved_by'], 'exist', 'skipOnError' => true, 'targetClass' => Users::class, 'targetAttribute' => ['approved_by' => 'id']],
+            [['approved_by'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['approved_by' => 'id']],
         ];
     }
 

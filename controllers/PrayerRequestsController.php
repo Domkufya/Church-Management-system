@@ -1,73 +1,92 @@
 <?php
 
 namespace app\controllers;
+
 use Yii;
 use app\models\PrayerRequests;
 use app\models\PrayerRequestsSearch;
+use app\models\Members;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
-/**
- * PrayerRequestsController implements the CRUD actions for PrayerRequests model.
- */
 class PrayerRequestsController extends Controller
 {
-    /**
-     * @inheritDoc
-     */
     public function behaviors()
-{
-    return array_merge(
-        parent::behaviors(),
-        [
-            'access' => [
-                'class' => \yii\filters\AccessControl::class,
-                'rules' => [
-                    [
-                        'allow' => true,
-                        'roles' => ['@'],
-                        'matchCallback' => function ($rule, $action) {
-                            return Yii::$app->user->identity->role !== 'member';
-                        },
+    {
+        return array_merge(
+            parent::behaviors(),
+            [
+                'access' => [
+                    'class' => \yii\filters\AccessControl::class,
+                    'rules' => [
+                        [
+                            'actions' => ['index', 'view'],
+                            'allow' => true,
+                            'roles' => ['@'],
+                        ],
+                        [
+                            'actions' => ['create', 'update', 'delete'],
+                            'allow' => true,
+                            'roles' => ['@'],
+                            'matchCallback' => function ($rule, $action) {
+                                return Yii::$app->user->identity->role !== 'member';
+                            },
+                        ],
+                    ],
+                    'denyCallback' => function ($rule, $action) {
+                        return $this->redirect(['/member/dashboard']);
+                    },
+                ],
+                'verbs' => [
+                    'class' => \yii\filters\VerbFilter::class,
+                    'actions' => [
+                        'delete' => ['POST'],
                     ],
                 ],
-                'denyCallback' => function ($rule, $action) {
-                    return $this->redirect(['/member/dashboard']);
-                },
-            ],
-            'verbs' => [
-                'class' => \yii\filters\VerbFilter::class,
-                'actions' => [
-                    'delete' => ['POST'],
-                ],
-            ],
-        ]
-    );
-}
+            ]
+        );
+    }
 
-    /**
-     * Lists all PrayerRequests models.
-     *
-     * @return string
-     */
     public function actionIndex()
     {
-        $searchModel = new PrayerRequestsSearch();
-        $dataProvider = $searchModel->search($this->request->queryParams);
+        $user = Yii::$app->user->identity;
+        $member = Members::findOne(['user_id' => $user->id]);
 
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
+        // Admin/pastor/secretary anaona yote
+        if ($user->role !== 'member') {
+            $searchModel = new PrayerRequestsSearch();
+            $dataProvider = $searchModel->search($this->request->queryParams);
+            return $this->render('index', [
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
+                'user' => $user,
+                'member' => $member,
+            ]);
+        }
+
+        // Member anaona maombi yake + maombi ya admin
+        $adminPrayers = PrayerRequests::find()
+            ->where(['created_by_role' => ['admin', 'pastor', 'secretary', 'superadmin', 'treasurer']])
+            ->orderBy(['created_at' => SORT_DESC])
+            ->all();
+
+        $myPrayers = [];
+        if ($member) {
+            $myPrayers = PrayerRequests::find()
+                ->where(['member_id' => $member->id, 'created_by_role' => 'member'])
+                ->orderBy(['created_at' => SORT_DESC])
+                ->all();
+        }
+
+        return $this->render('member-index', [
+            'adminPrayers' => $adminPrayers,
+            'myPrayers' => $myPrayers,
+            'user' => $user,
+            'member' => $member,
         ]);
     }
 
-    /**
-     * Displays a single PrayerRequests model.
-     * @param int $id ID
-     * @return string
-     * @throws NotFoundHttpException if the model cannot be found
-     */
     public function actionView($id)
     {
         return $this->render('view', [
@@ -75,18 +94,17 @@ class PrayerRequestsController extends Controller
         ]);
     }
 
-    /**
-     * Creates a new PrayerRequests model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return string|\yii\web\Response
-     */
     public function actionCreate()
     {
         $model = new PrayerRequests();
+        $user = Yii::$app->user->identity;
 
         if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+            if ($model->load($this->request->post())) {
+                $model->created_by_role = $user->role;
+                if ($model->save()) {
+                    return $this->redirect(['view', 'id' => $model->id]);
+                }
             }
         } else {
             $model->loadDefaultValues();
@@ -97,13 +115,6 @@ class PrayerRequestsController extends Controller
         ]);
     }
 
-    /**
-     * Updates an existing PrayerRequests model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param int $id ID
-     * @return string|\yii\web\Response
-     * @throws NotFoundHttpException if the model cannot be found
-     */
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
@@ -117,33 +128,17 @@ class PrayerRequestsController extends Controller
         ]);
     }
 
-    /**
-     * Deletes an existing PrayerRequests model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param int $id ID
-     * @return \yii\web\Response
-     * @throws NotFoundHttpException if the model cannot be found
-     */
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
-
         return $this->redirect(['index']);
     }
 
-    /**
-     * Finds the PrayerRequests model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param int $id ID
-     * @return PrayerRequests the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
     protected function findModel($id)
     {
         if (($model = PrayerRequests::findOne(['id' => $id])) !== null) {
             return $model;
         }
-
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 }

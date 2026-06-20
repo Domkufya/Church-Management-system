@@ -83,32 +83,32 @@ class MemberController extends Controller
     }
 
     public function actionCreatePrayer()
-    {
-        $user = Yii::$app->user->identity;
-        $member = Members::findOne(['user_id' => $user->id]);
+{
+    $user = Yii::$app->user->identity;
+    $member = Members::findOne(['user_id' => $user->id]);
 
-        if (!$member) {
-            Yii::$app->session->setFlash('error', 'Please complete your profile first!');
-            return $this->redirect(['/site/complete-profile']);
-        }
-
-        $model = new PrayerRequests();
-        $model->member_id = $member->id;
-        $model->status = 'Pending';
-
-        if (Yii::$app->request->isPost) {
-            $model->load(Yii::$app->request->post());
-            $model->member_id = $member->id;
-            $model->status = 'Pending';
-            if ($model->save()) {
-                Yii::$app->session->setFlash('success', 'Prayer request submitted successfully!');
-                return $this->redirect(['member/prayers']);
-            }
-        }
-
-        return $this->render('create-prayer', [
-            'model' => $model,
-            'user' => $user,
-        ]);
+    if (!$member) {
+        Yii::$app->session->setFlash('error', 'Please complete your profile first!');
+        return $this->redirect(['/site/complete-profile']);
     }
+
+    $model = new PrayerRequests();
+
+    if (Yii::$app->request->isPost) {
+        $model->load(Yii::$app->request->post());
+        $model->member_id = $member->id;
+        $model->status = 'Prayed';
+        $model->created_by_role = 'member';
+
+        if ($model->save()) {
+            Yii::$app->session->setFlash('success', 'Prayer request submitted successfully!');
+            return $this->redirect(['/prayer-requests/index']);
+        }
+    }
+
+    return $this->render('create-prayer', [
+        'model' => $model,
+        'user' => $user,
+    ]);
+}
 }

@@ -88,6 +88,18 @@ class AttendanceController extends Controller
         return $this->redirect(['index']);
     }
 
+    public function actionUpdate($id)
+{
+    $model = $this->findModel($id);
+
+    if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
+        return $this->redirect(['view', 'id' => $model->id]);
+    }
+
+    return $this->render('update', [
+        'model' => $model,
+    ]);
+}
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
@@ -97,7 +109,7 @@ class AttendanceController extends Controller
     public function actionTakeAttendance($event_id = null)
     {
         $events = Events::find()->all();
-        $members = Members::find()->where(['status' => 'Active'])->all();
+        $members = Members::find()->all();
 
         if (Yii::$app->request->isPost) {
             $post = Yii::$app->request->post();
@@ -107,14 +119,15 @@ class AttendanceController extends Controller
             Attendance::deleteAll(['event_id' => $event_id]);
 
             foreach ($members as $member) {
-                $attendance = new Attendance();
-                $attendance->event_id = $event_id;
-                $attendance->member_id = $member->id;
-                $attendance->status = isset($attendances[$member->id]) ? 'Present' : 'Absent';
-                $attendance->recorded_at = date('Y-m-d H:i:s');
-                $attendance->save();
-            }
-
+    $attendance = new Attendance();
+    $attendance->event_id = (int)$event_id;
+    $attendance->member_id = (int)$member->id;
+    $attendance->status = isset($attendances[$member->id]) ? 'Present' : 'Absent';
+    
+    if (!$attendance->save()) {
+        Yii::error($attendance->errors);
+    }
+}
             Yii::$app->session->setFlash('success', 'Attendance saved!');
             return $this->redirect(['take-attendance', 'event_id' => $event_id]);
         }
